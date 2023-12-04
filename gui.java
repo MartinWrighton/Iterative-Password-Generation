@@ -39,7 +39,16 @@ public class gui {
         this.trees = new ArrayList<JTree>();
         
 
-        // ACTION LISTENERS FOR BUTTONS
+
+        //#region New File Tab
+        JPanel panel1 = new JPanel();// new page panel
+        this.panels.add(panel1);
+        JTextField panel1_text1 = new JTextField(20);
+        JButton panel1_button1 = new JButton("Create new File");// create tab button
+
+        //#region Process for creating a new file tab
+
+        //#region Action to mutate
         ActionListener mutateChild = new ActionListener() {// process for creating a new child
             @Override
             public void actionPerformed(ActionEvent e) {// TODO learn how to add nodes to trees
@@ -47,12 +56,8 @@ public class gui {
             }
 
         };
-        //#region New File Tab
-        JPanel panel1 = new JPanel();// new page panel
-        this.panels.add(panel1);
-        JTextField panel1_text1 = new JTextField(20);
-        JButton panel1_button1 = new JButton("Create new File");// create tab button
-        //#region Process for creating a file tab
+        //#endregion Action to mutate
+        
         ActionListener createNewTab = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -93,17 +98,18 @@ public class gui {
 
             }
         };
-        //#endregion Process for creating a file tab
+        //#endregion Process for creating a new file tab
+        
         panel1_button1.addActionListener(createNewTab);// this actionlistener creates new tabs
         panel1.add(panel1_button1);
         panel1.add(panel1_text1);
-        this.tabs.addTab("New+", panel1);
+        this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);
         this.tabs.setBounds(0, 0, 800, 600);
         //#endregion New File Tab
         
         //#region Settings Tab
         JPanel settings = new JPanel();
-        this.tabs.addTab("Settings", settings);
+        this.tabs.insertTab("Settings", null, settings, "Personalise your experience", 0);
 
         //#region Valid Character Lists
         JLabel allowedCharactersText = new JLabel("Valid Characters:");// character lists

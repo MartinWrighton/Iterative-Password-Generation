@@ -109,65 +109,85 @@ public class gui {
         
         //#region Settings Tab
         JPanel settings = new JPanel();
+        settings.setBackground(new Color(200,200,255));
         this.tabs.insertTab("Settings", null, settings, "Personalise your experience", 0);
 
         //#region Valid Character Lists
+        JPanel characterPanel = new JPanel();
+        characterPanel.setBounds(10,10,385,255);
+        characterPanel.setLayout(null);
+        settings.add(characterPanel);
         JLabel allowedCharactersText = new JLabel("Valid Characters:");// character lists
-        allowedCharactersText.setBounds(100, 20, 100, 40);
-        settings.add(allowedCharactersText);
+        allowedCharactersText.setBounds(10,10, 100, 10);
+        characterPanel.add(allowedCharactersText);
         JCheckBox lowerCaseCheckBox = new JCheckBox("Lower case letters: a-z");//these are all allowed characters by the IBM Business Automation Workflow
-        lowerCaseCheckBox.setBounds(100, 50, 180, 40);
-        settings.add(lowerCaseCheckBox);
+        lowerCaseCheckBox.setBounds(10, 40, 180, 40);
+        characterPanel.add(lowerCaseCheckBox);
         JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
-        upperCaseCheckBox.setBounds(100, 80, 180, 40);
-        settings.add(upperCaseCheckBox);
+        upperCaseCheckBox.setBounds(10, 70, 180, 40);
+        characterPanel.add(upperCaseCheckBox);
         JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
-        numberCheckBox.setBounds(100, 110, 180, 40);
-        settings.add(numberCheckBox);
+        numberCheckBox.setBounds(10, 100, 180, 40);
+        characterPanel.add(numberCheckBox);
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
-        symbolCheckBox.setBounds(100, 140, 220, 40);
-        settings.add(symbolCheckBox);
+        symbolCheckBox.setBounds(10, 130, 220, 40);
+        characterPanel.add(symbolCheckBox);
         //#endregion Valid Character Lists
 
         //#region Password Policies
+
+        JPanel policyPanel = new JPanel();
+        policyPanel.setBounds(10,275,385,255);
+        policyPanel.setLayout(null);
+        settings.add(policyPanel);
         JLabel policyText = new JLabel("Required Policy:");// policy
-        policyText.setBounds(100, 250, 100, 40);
-        settings.add(policyText);
+        policyText.setBounds(10, 10, 100, 12);
+        policyPanel.add(policyText);
         //#endregion Password Policies
         
         //#region Wordlists
+        //TODO fix the coordinates on the elements in this box
+        JPanel wordlistPanel = new JPanel();
+        wordlistPanel.setBounds(405,10,385,680);
+        wordlistPanel.setLayout(null);
+        settings.add(wordlistPanel);
         JLabel wordListsText = new JLabel("Wordlists:");// word lists
         wordListsText.setBounds(500, 20, 100, 40);
-        settings.add(wordListsText);
+        wordlistPanel.add(wordListsText);
         // getting list of wordlists
         JComboBox wordBox = new JComboBox(new String[0]);
-        File wordFile = new File("../hashcat/CustomWordlists");
-        for (File i : wordFile.listFiles()) {
-            wordBox.addItem(i.getName());
+        try {
+            File wordFile = new File("../hashcat/CustomWordlists");
+            for (File i : wordFile.listFiles()) {
+                wordBox.addItem(i.getName());
+            }
+        } catch (Exception e) {
+            System.out.println("Hashcat folder not found");
         }
+        
         wordBox.setBounds(500, 70, 150, 20);
-        settings.add(wordBox);
+        wordlistPanel.add(wordBox);
         JButton selectList = new JButton("Use this list");
         selectList.setMargin(new Insets(0, 0, 0, 0));
         selectList.setBounds(670, 70, 75, 20);
         selectList.setBackground(new Color(255,105,97));
-        settings.add(selectList);
+        wordlistPanel.add(selectList);
         JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
         createListTitle.setBounds(500, 100, 100, 40);// sets position and size
         createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
-        settings.add(createListTitle);// adds it to page
+        wordlistPanel.add(createListTitle);// adds it to page
         JButton combineList = new JButton("Combine Lists");
         combineList.setMargin(new Insets(0, 0, 0, 0));
         combineList.setBounds(500, 150, 90, 20);
         combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
         combineList.setBackground(new Color(255,105,97));
-        settings.add(combineList);
+        wordlistPanel.add(combineList);
         JButton uploadList = new JButton("Upload Custom Lists");
         uploadList.setMargin(new Insets(0, 0, 0, 0));
         uploadList.setBounds(600, 150, 130, 20);
         uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
         uploadList.setBackground(new Color(255,105,97));
-        settings.add(uploadList);
+        wordlistPanel.add(uploadList);
         JButton personalList = new JButton("Create Personal List");
         personalList.setMargin(new Insets(0, 0, 0, 0));
         personalList.setBounds(500, 200, 130, 20);

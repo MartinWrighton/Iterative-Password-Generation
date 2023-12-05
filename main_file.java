@@ -55,6 +55,7 @@ public class main_file {
 
     public static void createPersonalList() throws IOException {
         // THIS PART IS HOW WE USE HASHCAT TO CREATE NEW WORDLISTS
+        //https://www.blackhillsinfosec.com/wp-content/uploads/2020/09/HashcatCheatSheet.v2018.1b.pdf  is goated
         ArrayList<String> command = new ArrayList<String>();// command is a cmd command and a list of
                                                             // arguments
         command.add("hashcat.exe");// the command to run hashcat, for some reason this uses the hashcat in

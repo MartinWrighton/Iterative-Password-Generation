@@ -5,17 +5,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
+
+import javax.swing.UIManager;
 
 public class main_file {
     public static node selected_node;
     public static gui gui;
     public static void main(String[] args) throws IOException {
+        try {//TODO do we want windows or java L&F
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch(Exception e){
+        
+        }
         gui = new gui();
         System.out.println("Welcome, please enter base password:");
         Scanner scanner = new Scanner(System.in);
         boolean main_loop = false;
-        while (main_loop = true) {// main loop LEGACY
+        while (main_loop == true) {// main loop LEGACY
             System.out.println("Your currently selected node is " + selected_node.getWord()
                     + " how would you like to proceed:\n1)View subtree\n2)Move node\n3)Mutate into child");
             switch (scanner.nextLine()) {

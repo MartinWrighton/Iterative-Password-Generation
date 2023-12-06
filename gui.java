@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,13 +13,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.SwingConstants;
-import javax.swing.JPopupMenu.Separator;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -39,7 +35,7 @@ public class gui {
         this.panels = new ArrayList<JPanel>();
         this.trees = new ArrayList<JTree>();
         
-
+        
 
         //#region New File Tab
         JPanel panel1 = new JPanel();// new page panel

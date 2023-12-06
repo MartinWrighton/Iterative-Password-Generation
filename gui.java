@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -48,15 +49,7 @@ public class gui {
 
         //#region Process for creating a new file tab
 
-        //#region Action to mutate
-        ActionListener mutateChild = new ActionListener() {// process for creating a new child
-            @Override
-            public void actionPerformed(ActionEvent e) {// TODO learn how to add nodes to trees
-
-            }
-
-        };
-        //#endregion Action to mutate
+        
         
         ActionListener createNewTab = new ActionListener() {
             @Override
@@ -65,10 +58,11 @@ public class gui {
                 panels.add(newpanel);
                 tabs.addTab(panel1_text1.getText(), newpanel);
                 // creating tree
-                DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new node(panel1_text1.getText(), null));// configuring
-                                                                                                                     // tree
-
+                node newNode = new node(panel1_text1.getText(), null,null,null);
+                DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree
+                newNode.setTreeNode(rootNode);
                 DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+                newNode.setTreeModel(treeModel);
                 JTree tree = new JTree(treeModel);
                 tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// Tree selection
                                                                                                     // listener
@@ -76,12 +70,13 @@ public class gui {
                 tree.addTreeSelectionListener(new TreeSelectionListener() {
                     @Override
                     public void valueChanged(TreeSelectionEvent e) {
-                        DefaultMutableTreeNode clicked_node = (DefaultMutableTreeNode) tree
-                                .getLastSelectedPathComponent();
+                        DefaultMutableTreeNode clicked_node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                         if (clicked_node == null) {
                             return;
                         }
                         main_file.selected_node = (node) clicked_node.getUserObject();
+                        System.out.println(main_file.selected_node);
+                        System.out.println(main_file.selected_node.getTreeNode().getChildCount());
 
                     }
 
@@ -92,9 +87,18 @@ public class gui {
 
                 // Buttons for panel
                 JButton mutateButton = new JButton("Mutate New Child");
-                mutateButton.addActionListener(mutateChild);// this actionlistener creates children
+                mutateButton.addActionListener( new ActionListener(){// process for creating a new child
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                    main_file.selected_node.addChild(new Date().toString());
+                    main_file.gui.frame.validate();//trying to defresh gui (not working)
+                    
+                }
+                });// this actionlistener creates children
                 mutateButton.setBackground(new Color(255,105,97));
                 newpanel.add(mutateButton);
+                
 
             }
         };
@@ -143,6 +147,20 @@ public class gui {
         JLabel policyText = new JLabel("Required Policy:");// policy
         policyText.setBounds(10, 10, 100, 12);
         policyPanel.add(policyText);
+        JCheckBox lengthCheckBox = new JCheckBox("At least ___ characters");//these are all allowed characters by the IBM Business Automation Workflow
+        lengthCheckBox.setBounds(10, 40, 180, 40);
+        policyPanel.add(lengthCheckBox);
+        JCheckBox capitalCheckBox = new JCheckBox("Must include a capital letter");//these are all allowed characters by the IBM Business Automation Workflow
+        capitalCheckBox.setBounds(10, 70, 200, 40);
+        policyPanel.add(capitalCheckBox);
+        JCheckBox numeralCheckBox = new JCheckBox("Must include a number");//these are all allowed characters by the IBM Business Automation Workflow
+        numeralCheckBox.setBounds(10, 100, 180, 40);
+        policyPanel.add(numberCheckBox);
+        JCheckBox specialCheckBox = new JCheckBox("Must include a symbol");//these are all allowed characters by the IBM Business Automation Workflow
+        specialCheckBox.setBounds(10, 130, 180, 40);
+        policyPanel.add(specialCheckBox);
+
+
         //#endregion Password Policies
         
         //#region Wordlists
@@ -219,7 +237,8 @@ public class gui {
         this.frame.setVisible(true); // making the frame visible
 
     }
-    //#region Getters and Setters
+
+    // #region Getters and Setters
     public JFrame getFrame() {
         return frame;
     }
@@ -243,6 +262,6 @@ public class gui {
     public void setPanels(ArrayList<JPanel> panels) {
         this.panels = panels;
     }
-    //#endregion Getters and Setters
+    // #endregion Getters and Setters
 
 }

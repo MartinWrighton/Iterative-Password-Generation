@@ -1,35 +1,45 @@
 import java.util.ArrayList;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
 public class node {
     private String word;
     private int strength;
     private node parent;
     private ArrayList<node> children;
-    public node(String word,node parent){
+    private DefaultMutableTreeNode treeNode;
+    private DefaultTreeModel treeModel;
+
+    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel){
         this.word = word;
         this.children = new ArrayList<node>();
         this.parent = parent;
+        this.treeNode = treeNode;
+        this.treeModel = treeModel;
     }
 
 
-
-
-    public String toTree(){//WIP might not make it until we go GUI
-        
-        String branch = "";
-        for (int i = 0 ; i < this.getChildren().size() ; i++){
-            branch = branch + this.getChildren().get(i).toTree();
-        }
-        return this.getWord()+"\n"+branch;
-        
-    }
 
     @Override
     public String toString(){
         return this.word;
     }
 
-
+    public void addChild(String name){
+        System.out.print("addChild ");
+        node newNode = new node(name, this, null,this.treeModel);//create the new node
+        System.out.print("newNode ");
+        DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);// create the new treeNode holding the node
+        System.out.print("newTreeNode ");
+        newNode.setTreeNode(newTreeNode);// tell the node who its treeNode is
+        System.out.print("setTreeNode ");
+        this.children.add(newNode);// adds new node to is nodes children
+        System.out.print("addNode ");
+        this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
+        System.out.println("addTreeNode");
+        this.treeModel.reload();
+    };
 
 
 
@@ -63,6 +73,14 @@ public class node {
         return this.children;
     }
 
+    public DefaultMutableTreeNode getTreeNode(){
+        return this.treeNode;
+    }
+
+    public DefaultTreeModel getDefaultTreeModel(){
+        return this.treeModel;
+    }
+
     public void setWord(String word) {
         this.word = word;
     }
@@ -77,6 +95,14 @@ public class node {
 
     public void setChildren(ArrayList<node> children) {
         this.children = children;
+    }
+
+    public void setTreeNode(DefaultMutableTreeNode treeNode){
+        this.treeNode = treeNode;
+    };
+
+    public void setTreeModel(DefaultTreeModel treeModel){
+        this.treeModel = treeModel;
     }
     
 }

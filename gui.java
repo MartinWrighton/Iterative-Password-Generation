@@ -43,26 +43,24 @@ public class gui {
         JTextField panel1_text1 = new JTextField(20);
         JButton panel1_button1 = new JButton("Create new File");// create tab button
 
-        //#region Process for creating a new file tab
+        //#region neawly created tree tabs
 
-        
-        
         ActionListener createNewTab = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newpanel = new JPanel();
                 panels.add(newpanel);
                 tabs.addTab(panel1_text1.getText(), newpanel);
-                // creating tree
+                //#region creating tree
                 node newNode = new node(panel1_text1.getText(), null,null,null);
                 DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree
                 newNode.setTreeNode(rootNode);
                 DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
                 newNode.setTreeModel(treeModel);
                 JTree tree = new JTree(treeModel);
-                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// Tree selection
-                                                                                                    // listener
 
+                //#region tree selection listener
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 tree.addTreeSelectionListener(new TreeSelectionListener() {
                     @Override
                     public void valueChanged(TreeSelectionEvent e) {
@@ -77,24 +75,46 @@ public class gui {
                     }
 
                 });
-                // adding tree to storage
-                newpanel.add(tree);
-                trees.add(tree);
+                //#endregion tree selection listener
 
-                // Buttons for panel
+                //#region adding tree to storage and page
+                
+                
+                newpanel.setLayout(null);
+                JPanel newLeftPanel = new JPanel();
+                newpanel.add(newLeftPanel);
+                newLeftPanel.setBounds(10, 10, 385, 680);
+                
+                newLeftPanel.add(tree);
+                newLeftPanel.setLayout(null);
+                tree.setBounds(10, 10, 375, 670);
+                trees.add(tree);
+                //#endregion adding tree to storage and page
+            //#endregion creating tree
+
+                //#region right panel
+                //TODO add all different mutation types
                 JButton mutateButton = new JButton("Mutate New Child");
                 mutateButton.addActionListener( new ActionListener(){// process for creating a new child
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                    main_file.selected_node.addChild(new Date().toString());
-                    main_file.gui.frame.validate();//trying to defresh gui (not working)
+                    if(main_file.selected_node != null){
+                    main_file.selected_node.addChild(new Date().toString());//date is the test name
+                    }
                     
                 }
                 });// this actionlistener creates children
                 mutateButton.setBackground(new Color(255,105,97));
-                newpanel.add(mutateButton);
-                
+                mutateButton.setBounds(10, 10, 120, 20);
+                JPanel newRightPanel = new JPanel();
+                newpanel.add(newRightPanel);
+                newRightPanel.setBounds(405, 10, 385, 600);
+                newRightPanel.add(mutateButton);
+                newRightPanel.setLayout(null);
+
+                newpanel.setBackground(new Color(200,200,255));
+                //#endregion right panel
 
             }
         };
@@ -161,7 +181,7 @@ public class gui {
         
         //#region Wordlists
         JPanel wordlistPanel = new JPanel();
-        wordlistPanel.setBounds(405,10,385,680);
+        wordlistPanel.setBounds(405,10,385,600);
         wordlistPanel.setLayout(null);
         settings.add(wordlistPanel);
         JLabel wordListsText = new JLabel("Wordlists:");// word lists

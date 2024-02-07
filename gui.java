@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,14 +45,14 @@ public class gui {
         JTextField panel1_text1 = new JTextField(20);
         JButton panel1_button1 = new JButton("Create new File");// create tab button
 
-        //#region neawly created tree tabs
+        //#region newly created tree tabs
 
         ActionListener createNewTab = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newpanel = new JPanel();
                 panels.add(newpanel);
-                tabs.addTab(panel1_text1.getText(), newpanel);
+                tabs.insertTab(panel1_text1.getText(), null, newpanel, null, tabs.getSelectedIndex());
                 //#region creating tree
                 node newNode = new node(panel1_text1.getText(), null,null,null);
                 DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree
@@ -72,6 +74,9 @@ public class gui {
                         System.out.println(main_file.selected_node);
                         System.out.println(main_file.selected_node.getTreeNode().getChildCount());
 
+                        //setting text on right panel THIS WORKS BY PIXEL PLACEMENT AND WIL BREAK IF YOU MOVE THE COMPONENTS
+                        JLabel current_page_title = (JLabel) main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
+                        current_page_title.setText(clicked_node.toString());
                     }
 
                 });
@@ -93,8 +98,29 @@ public class gui {
             //#endregion creating tree
 
                 //#region right panel
-                //TODO add all different mutation types
-                JButton mutateButton = new JButton("Mutate New Child");
+                //TODO add all different mutation typesP
+               
+                JPanel newRightPanel = new JPanel();//setting up right panel
+                newpanel.add(newRightPanel);
+                newRightPanel.setBounds(405, 10, 385, 600);
+                newRightPanel.setLayout(null);
+                newpanel.setBackground(new Color(200,200,255));
+
+                //adding titles to right panel
+                JLabel currentNodeLabel = new JLabel("-"); //MOVING THIS WILL PROVENT IT FROM WORKING (SEE TREE LISTENER) (this is a poor workaround)
+                currentNodeLabel.setBounds(10, 0, 300, 20);
+                currentNodeLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+                newRightPanel.add(currentNodeLabel);
+
+                JLabel rightPanelMutateLabel = new JLabel("Create New Children:");
+                rightPanelMutateLabel.setBounds(10, 15, 200, 40);
+                newRightPanel.add(rightPanelMutateLabel);
+
+                JLabel rightPanelTestLabel = new JLabel("Test this Node:");
+                rightPanelTestLabel.setBounds(10, 250, 200, 40);
+                newRightPanel.add(rightPanelTestLabel);
+
+                JButton mutateButton = new JButton("Mutate New Child (test)"); // setting up mutate button
                 mutateButton.addActionListener( new ActionListener(){// process for creating a new child
 
                     @Override
@@ -106,14 +132,35 @@ public class gui {
                 }
                 });// this actionlistener creates children
                 mutateButton.setBackground(new Color(255,105,97));
-                mutateButton.setBounds(10, 10, 120, 20);
-                JPanel newRightPanel = new JPanel();
-                newpanel.add(newRightPanel);
-                newRightPanel.setBounds(405, 10, 385, 600);
+                mutateButton.setBounds(10, 50, 150, 20);
+                mutateButton.setToolTipText("This is a test button to create test children");
                 newRightPanel.add(mutateButton);
-                newRightPanel.setLayout(null);
 
-                newpanel.setBackground(new Color(200,200,255));
+                    //#region example mutate buttons
+                JButton mutateButtonT1 = new JButton("Pad Numbers");
+                mutateButtonT1.setBackground(new Color(255,105,97));
+                mutateButtonT1.setBounds(10, 80, 150, 20);
+                mutateButtonT1.setToolTipText("Create a child by padding the parent with numbers");
+                mutateButtonT1.setEnabled(false);
+                newRightPanel.add(mutateButtonT1);
+                
+                JButton mutateButtonT2 = new JButton("Homoglyph");
+                mutateButtonT2.setBackground(new Color(255,105,97));
+                mutateButtonT2.setBounds(10, 110, 150, 20);
+                mutateButtonT2.setToolTipText("Create a child by exchanging characters with homoglyphs");
+                mutateButtonT2.setEnabled(false);
+                newRightPanel.add(mutateButtonT2);
+
+                JButton mutateButtonT3 = new JButton("Capitalize");
+                mutateButtonT3.setBackground(new Color(255,105,97));
+                mutateButtonT3.setBounds(10, 140, 150, 20);
+                mutateButtonT3.setToolTipText("Create a child by capitalizing random characters");
+                mutateButtonT3.setEnabled(false);
+                newRightPanel.add(mutateButtonT3);
+                    //#endregion
+
+
+
                 //#endregion right panel
 
             }
@@ -146,7 +193,7 @@ public class gui {
         JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
         upperCaseCheckBox.setBounds(10, 70, 180, 40);
         characterPanel.add(upperCaseCheckBox);
-        JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
+        JCheckBox numberCheckBox = new JCheckBox("Upper case letters: A-Z");
         numberCheckBox.setBounds(10, 100, 180, 40);
         characterPanel.add(numberCheckBox);
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
@@ -171,7 +218,7 @@ public class gui {
         policyPanel.add(capitalCheckBox);
         JCheckBox numeralCheckBox = new JCheckBox("Must include a number");//these are all allowed characters by the IBM Business Automation Workflow
         numeralCheckBox.setBounds(10, 100, 180, 40);
-        policyPanel.add(numberCheckBox);
+        policyPanel.add(numeralCheckBox);
         JCheckBox specialCheckBox = new JCheckBox("Must include a symbol");//these are all allowed characters by the IBM Business Automation Workflow
         specialCheckBox.setBounds(10, 130, 180, 40);
         policyPanel.add(specialCheckBox);
@@ -241,6 +288,8 @@ public class gui {
         });
         personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
         personalList.setBackground(new Color(255,179,71));
+
+
         //#endregion Wordlists
         wordlistPanel.add(personalList);
         settings.setLayout(null);// let setBounds work

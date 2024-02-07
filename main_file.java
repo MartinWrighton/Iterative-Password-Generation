@@ -64,7 +64,7 @@ public class main_file {
         ArrayList<String> command = new ArrayList<String>();// command is a cmd command and a list of
                                                             // arguments
         command.add("hashcat.exe");// the command to run hashcat, for some reason this uses the hashcat in
-                                   // vscode_test directoryP
+                                   // vscode_test directory
         // command.add("--force"); hashcat says this is a bad idea
         command.add("CustomWordlists/words.txt");// the file we are using as input
         command.add("-r");// tell it we want to use a rule

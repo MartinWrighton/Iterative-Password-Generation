@@ -7,14 +7,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -98,7 +102,7 @@ public class gui {
             //#endregion creating tree
 
                 //#region right panel
-                //TODO add all different mutation typesP
+                //TODO add all different mutation types
                
                 JPanel newRightPanel = new JPanel();//setting up right panel
                 newpanel.add(newRightPanel);
@@ -120,46 +124,80 @@ public class gui {
                 rightPanelTestLabel.setBounds(10, 250, 200, 40);
                 newRightPanel.add(rightPanelTestLabel);
 
-                JButton mutateButton = new JButton("Mutate New Child (test)"); // setting up mutate button
-                mutateButton.addActionListener( new ActionListener(){// process for creating a new child
+                JButton goMutate = new JButton("Go (test)"); // setting up mutate button
+                goMutate.addActionListener( new ActionListener(){// process for creating a new child
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
                     if(main_file.selected_node != null){
-                    main_file.selected_node.addChild(new Date().toString());//date is the test name
+                        //we will need a randomizer
+                        Random random = new Random();
+                        
+
+                        //source of event is the button
+                        JButton gButton = (JButton) e.getSource();
+                        //Right panel is the parent
+                        JPanel rPanel = (JPanel) gButton.getParent();
+                        //content of howManySpin while we are here
+                        int howManyNum = (int) ((JSpinner) rPanel.getComponentAt(200, 170)).getValue();
+                        //radio button is a child of parent
+                        if (((AbstractButton) rPanel.getComponentAt(10, 80)).isSelected()){//Pixel locator
+                            //pad numbers
+                            String frontPad = "";
+                            String backPad = "";
+                            for (int i = 0 ; i < howManyNum ; i++){
+                                frontPad = frontPad +(Integer.toString(random.nextInt(10)));
+                                backPad = backPad +(Integer.toString(random.nextInt(10)));
+                            }
+                            main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                        } else if (((AbstractButton) rPanel.getComponentAt(10, 110)).isSelected()){
+                            //homoglyph
+                        } else if (((AbstractButton) rPanel.getComponentAt(10, 140)).isSelected()){
+                            //capitalize
+                        } else {
+                            //else
+                            main_file.selected_node.addChild(new Date().toString());//date is the test name
+                        }
                     }
                     
                 }
                 });// this actionlistener creates children
-                mutateButton.setBackground(new Color(255,105,97));
-                mutateButton.setBounds(10, 50, 150, 20);
-                mutateButton.setToolTipText("This is a test button to create test children");
-                newRightPanel.add(mutateButton);
+                goMutate.setBackground(new Color(255,105,97));
+                goMutate.setBounds(200, 200, 150, 20);
+                goMutate.setToolTipText("This is a test button to create test children");
+                newRightPanel.add(goMutate);
 
-                    //#region example mutate buttons
-                JButton mutateButtonT1 = new JButton("Pad Numbers");
-                mutateButtonT1.setBackground(new Color(255,105,97));
-                mutateButtonT1.setBounds(10, 80, 150, 20);
-                mutateButtonT1.setToolTipText("Create a child by padding the parent with numbers");
-                mutateButtonT1.setEnabled(false);
-                newRightPanel.add(mutateButtonT1);
-                
-                JButton mutateButtonT2 = new JButton("Homoglyph");
-                mutateButtonT2.setBackground(new Color(255,105,97));
-                mutateButtonT2.setBounds(10, 110, 150, 20);
-                mutateButtonT2.setToolTipText("Create a child by exchanging characters with homoglyphs");
-                mutateButtonT2.setEnabled(false);
-                newRightPanel.add(mutateButtonT2);
+                    //#region example mutate options
+                JRadioButton mutateRadioButtonT1 = new JRadioButton("Pad Numbers");
+                mutateRadioButtonT1.setBounds(10, 80, 150, 20);
+                mutateRadioButtonT1.setToolTipText("Create a child by padding the parent with numbers");
+                newRightPanel.add(mutateRadioButtonT1);
+                JRadioButton mutateRadioButtonT2 = new JRadioButton("Homoglyph");
+                mutateRadioButtonT2.setBounds(10, 110, 150, 20);
+                mutateRadioButtonT2.setToolTipText("Create a child by exchanging characters with homoglyphs");
+                newRightPanel.add(mutateRadioButtonT2);
 
-                JButton mutateButtonT3 = new JButton("Capitalize");
-                mutateButtonT3.setBackground(new Color(255,105,97));
-                mutateButtonT3.setBounds(10, 140, 150, 20);
-                mutateButtonT3.setToolTipText("Create a child by capitalizing random characters");
-                mutateButtonT3.setEnabled(false);
-                newRightPanel.add(mutateButtonT3);
+                JRadioButton mutateRadioButtonT3 = new JRadioButton("Capitalize");
+                mutateRadioButtonT3.setBounds(10, 140, 150, 20);
+                mutateRadioButtonT3.setToolTipText("Create a child by capitalizing random characters");
+                newRightPanel.add(mutateRadioButtonT3);
+
+                ButtonGroup mutateRadioGroup = new ButtonGroup();
+                mutateRadioGroup.add(mutateRadioButtonT1);
+                mutateRadioGroup.add(mutateRadioButtonT2);
+                mutateRadioGroup.add(mutateRadioButtonT3);
                     //#endregion
 
+                    //#region how many X
+                JLabel howManyLabel = new JLabel("How many?");
+                howManyLabel.setBounds(200, 150, 200, 20);
+                newRightPanel.add(howManyLabel);
 
+                JSpinner howManySpin = new JSpinner();
+                howManySpin.setBounds(200, 170, 40, 20);
+                newRightPanel.add(howManySpin);
+                    //#endregion
+                
 
                 //#endregion right panel
 
@@ -193,7 +231,7 @@ public class gui {
         JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
         upperCaseCheckBox.setBounds(10, 70, 180, 40);
         characterPanel.add(upperCaseCheckBox);
-        JCheckBox numberCheckBox = new JCheckBox("Upper case letters: A-Z");
+        JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
         numberCheckBox.setBounds(10, 100, 180, 40);
         characterPanel.add(numberCheckBox);
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");

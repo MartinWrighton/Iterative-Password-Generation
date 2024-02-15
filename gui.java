@@ -15,6 +15,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -23,6 +24,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -31,7 +36,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class gui {
     private JFrame frame;
-    private JTabbedPane tabs;
+    JTabbedPane tabs;
     private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
 
@@ -75,8 +80,9 @@ public class gui {
                             return;
                         }
                         main_file.selected_node = (node) clicked_node.getUserObject();
-                        System.out.println(main_file.selected_node);
-                        System.out.println(main_file.selected_node.getTreeNode().getChildCount());
+                        
+                        //System.out.println(main_file.selected_node);
+                        //System.out.println(main_file.selected_node.getTreeNode().getChildCount());
 
                         //setting text on right panel THIS WORKS BY PIXEL PLACEMENT AND WIL BREAK IF YOU MOVE THE COMPONENTS
                         JLabel current_page_title = (JLabel) main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
@@ -143,13 +149,21 @@ public class gui {
                         //radio button is a child of parent
                         if (((AbstractButton) rPanel.getComponentAt(10, 80)).isSelected()){//Pixel locator
                             //pad numbers
-                            String frontPad = "";
-                            String backPad = "";
-                            for (int i = 0 ; i < howManyNum ; i++){
-                                frontPad = frontPad +(Integer.toString(random.nextInt(10)));
-                                backPad = backPad +(Integer.toString(random.nextInt(10)));
+                            boolean isValid = ((AbstractButton) main_file.gui.tabs.getComponentAt(0).getComponentAt(10,10).getComponentAt(10,100)).isSelected();
+                            if (isValid == true){
+                                String frontPad = "";
+                                String backPad = "";
+                                for (int i = 0 ; i < howManyNum ; i++){
+                                    frontPad = frontPad +(Integer.toString(random.nextInt(10)));
+                                    backPad = backPad +(Integer.toString(random.nextInt(10)));
+                                }
+                                main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                            } else {//dialogue box
+                                JDialog dialog = new JDialog(main_file.gui.frame,"Your policy does not allow numbers!",true);
+                                dialog.setSize(300,20);
+                                dialog.setLocationRelativeTo(main_file.gui.frame);
+                                dialog.setVisible(true);
                             }
-                            main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
                         } else if (((AbstractButton) rPanel.getComponentAt(10, 110)).isSelected()){
                             //homoglyph
                         } else if (((AbstractButton) rPanel.getComponentAt(10, 140)).isSelected()){
@@ -193,10 +207,23 @@ public class gui {
                 howManyLabel.setBounds(200, 150, 200, 20);
                 newRightPanel.add(howManyLabel);
 
-                JSpinner howManySpin = new JSpinner();
+                
+                JSpinner howManySpin = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
                 howManySpin.setBounds(200, 170, 40, 20);
                 newRightPanel.add(howManySpin);
                     //#endregion
+                
+                    //#region test password
+                    JButton goTest = new JButton("Test");
+                    goTest.setBounds(10, 300, 80, 20);
+                    newRightPanel.add(goTest);
+                    goTest.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e){
+                            passwordCheck checker = new passwordCheck();
+                            checker.execute();
+                        }});
+                    //#endregion test password
                 
 
                 //#endregion right panel
@@ -226,16 +253,16 @@ public class gui {
         allowedCharactersText.setBounds(10,10, 100, 10);
         characterPanel.add(allowedCharactersText);
         JCheckBox lowerCaseCheckBox = new JCheckBox("Lower case letters: a-z");//these are all allowed characters by the IBM Business Automation Workflow
-        lowerCaseCheckBox.setBounds(10, 40, 180, 40);
+        lowerCaseCheckBox.setBounds(10, 40, 180, 20);
         characterPanel.add(lowerCaseCheckBox);
         JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
-        upperCaseCheckBox.setBounds(10, 70, 180, 40);
+        upperCaseCheckBox.setBounds(10, 70, 180, 20);
         characterPanel.add(upperCaseCheckBox);
         JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
-        numberCheckBox.setBounds(10, 100, 180, 40);
+        numberCheckBox.setBounds(10, 100, 180, 20);
         characterPanel.add(numberCheckBox);
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
-        symbolCheckBox.setBounds(10, 130, 220, 40);
+        symbolCheckBox.setBounds(10, 130, 220, 20);
         characterPanel.add(symbolCheckBox);
         //#endregion Valid Character Lists
 

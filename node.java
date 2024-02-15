@@ -27,17 +27,17 @@ public class node {
     }
 
     public void addChild(String name){
-        System.out.print("addChild ");
+        //System.out.print("addChild ");
         node newNode = new node(name, this, null,this.treeModel);//create the new node
-        System.out.print("newNode ");
+        //System.out.print("newNode ");
         DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);// create the new treeNode holding the node
-        System.out.print("newTreeNode ");
+        //System.out.print("newTreeNode ");
         newNode.setTreeNode(newTreeNode);// tell the node who its treeNode is
-        System.out.print("setTreeNode ");
+        //System.out.print("setTreeNode ");
         this.children.add(newNode);// adds new node to is nodes children
-        System.out.print("addNode ");
+        //System.out.print("addNode ");
         this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
-        System.out.println("addTreeNode");
+        //System.out.println("addTreeNode");
         this.treeModel.reload();
     };
 

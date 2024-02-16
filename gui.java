@@ -220,7 +220,8 @@ public class gui {
                     goTest.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e){
-                            passwordCheck checker = new passwordCheck();
+                            passwordCheck checker = new passwordCheck(main_file.selected_node.getWord(),"martin");
+                            //TODO add file handling, maybe just concat the whole file (make sure to remove endlines ) nad patternmatch against the whole thing?
                             checker.execute();
                         }});
                     //#endregion test password

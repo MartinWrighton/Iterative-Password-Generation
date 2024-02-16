@@ -5,26 +5,31 @@ import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
 public class passwordCheck extends SwingWorker<String,Object> {
+    private String pattern;
+    private String text;
+    public  passwordCheck(String pattern, String text){
+        this.pattern = pattern;
+        this.text = text;
+    }
 
     @Override
     protected String doInBackground() throws Exception {
         //TODO this is the background process, where the password check can be done
-        approxStringMatch("happy", "Have a hsppyday");
-
-        return "Done";
+        return Integer.toString(approxStringMatch(this.pattern, this.text));
     }
     protected void done(){
+        //TODO this is where the gui gets updated at the end
         JLabel current_page_title = (JLabel) main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
         try {
-            //TODO this is where the gui gets updated at the end
+            
             current_page_title.setText(get());
 
             
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
+            // Auto-generated catch block
             e.printStackTrace();
         } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
+            // Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -53,9 +58,10 @@ public class passwordCheck extends SwingWorker<String,Object> {
                 System.out.println("");
         }
         }
-        
-        //TODO return smallest difference
-        return 1;
+        printMatrix(matrix);
+        System.out.println(getMatch(matrix, textArray));
+        Arrays.sort(matrix[matrix.length-1]);
+        return matrix[matrix.length-1][0];
     }
 
 
@@ -68,6 +74,37 @@ public class passwordCheck extends SwingWorker<String,Object> {
             }
             System.out.println("");
         }
+    }
+
+    private String getMatch(int[][] matrix,String[] textArray){
+        int lowestJ = 0;
+        int lowest = 999;
+        String match = "";
+        //find lowest one in last row
+        
+        for (int j = 0 ; j < matrix[matrix.length-1].length ; j++){
+            if (matrix[matrix.length-1][j]<lowest){
+                lowest = matrix[matrix.length-1][j];
+                lowestJ = j;
+            }
+        }
+        //match = match + textArray[lowestJ-1];
+
+        System.out.println(lowestJ);
+        for (int i= matrix.length-2 ; i>=0 ;i--){
+            if (matrix[i][lowestJ]<matrix[i][lowestJ-1]){
+                
+            } else {
+                match = textArray[lowestJ-1] + match;
+                lowestJ = lowestJ-1;
+                
+            }
+            System.out.print(lowestJ);
+            System.out.print(" : ");
+            System.out.println(match);
+        }
+        return match;
+            
     }
     
 }

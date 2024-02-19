@@ -24,10 +24,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -231,7 +228,7 @@ public class gui {
                         @Override
                         public void actionPerformed(ActionEvent e){
                             passwordCheck checker = new passwordCheck(main_file.selected_node.getWord(),"martin");
-                            //TODO add file handling, maybe just concat the whole file (make sure to remove endlines ) nad patternmatch against the whole thing?
+                            //TODO add file handling, maybe just concat the whole file (make sure to remove endlines ) and patternmatch against the whole thing?
                             checker.execute();
                         }});
                     //#endregion test password
@@ -317,7 +314,7 @@ public class gui {
     }
 
     public void createWordlistPanel(JPanel settings){
-
+                //TODO add wordlist handling and clean up the logic into functions
                 JPanel wordlistPanel = new JPanel();
                 wordlistPanel.setBounds(405,10,385,600);
                 wordlistPanel.setLayout(null);
@@ -326,7 +323,7 @@ public class gui {
                 wordListsText.setBounds(10, 10, 100, 40);
                 wordlistPanel.add(wordListsText);
                 // getting list of wordlists
-                JComboBox wordBox = new JComboBox(new String[0]);
+                JComboBox<String> wordBox = new JComboBox<String>();
                 try {
                     File wordFile = new File("../hashcat/CustomWordlists");
                     for (File i : wordFile.listFiles()) {

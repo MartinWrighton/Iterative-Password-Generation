@@ -77,6 +77,7 @@ public class passwordCheck extends SwingWorker<String,Object> {
     }
 
     private String getMatch(int[][] matrix,String[] textArray){
+        //TODO something here is array index erroring
         int lowestJ = 0;
         int lowest = 999;
         String match = "";

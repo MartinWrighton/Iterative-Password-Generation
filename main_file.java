@@ -3,9 +3,6 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
-
 import javax.swing.UIManager;
 
 public class main_file {
@@ -19,6 +16,10 @@ public class main_file {
         }
         gui = new gui();
     }
+
+
+
+
     public static void createPersonalList() throws IOException {
         // THIS PART IS HOW WE USE HASHCAT TO CREATE NEW WORDLISTS
         //https://www.blackhillsinfosec.com/wp-content/uploads/2020/09/HashcatCheatSheet.v2018.1b.pdf  is goated
@@ -40,6 +41,7 @@ public class main_file {
         // System.out.println("directory: " + build.directory());
         // build.redirectErrorStream(true);
         Process process = build.start();
+        process.getErrorStream();//added so that the "this isnt being used warning would go away"
         // printing the output of the program while it runs
         // BufferedReader stdInput = new BufferedReader(new
         // InputStreamReader(process.getInputStream()));

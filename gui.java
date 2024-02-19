@@ -46,8 +46,19 @@ public class gui {
         this.panels = new ArrayList<JPanel>();
         this.trees = new ArrayList<JTree>();
         
+        createNewFileTab();
         
+        createSettingsTab();
+        
+        this.frame.add(tabs);
+        this.frame.setSize(800, 600); // 400 width and 500 height
+        this.frame.setLayout(null); // using no layout managers
+        this.frame.setVisible(true); // making the frame visible
 
+    }
+
+    private void createNewFileTab(){
+        
         //#region New File Tab
         JPanel panel1 = new JPanel();// new page panel
         this.panels.add(panel1);
@@ -239,6 +250,10 @@ public class gui {
         this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);
         this.tabs.setBounds(0, 0, 800, 600);
         //#endregion New File Tab
+   
+    }
+
+    private void createSettingsTab(){
         
         //#region Settings Tab
         JPanel settings = new JPanel();
@@ -362,13 +377,7 @@ public class gui {
         this.panels.add(settings);
         //#endregion Settings Tab
 
-        this.frame.add(tabs);
-        this.frame.setSize(800, 600); // 400 width and 500 height
-        this.frame.setLayout(null); // using no layout managers
-        this.frame.setVisible(true); // making the frame visible
-
     }
-
     // #region Getters and Setters
     public JFrame getFrame() {
         return frame;

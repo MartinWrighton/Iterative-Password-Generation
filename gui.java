@@ -45,15 +45,14 @@ public class gui {
         this.tabs = new JTabbedPane();// tabbed pane
         this.panels = new ArrayList<JPanel>();
         this.trees = new ArrayList<JTree>();
-        
-        createNewFileTab();
-        
-        createSettingsTab();
-        
         this.frame.add(tabs);
         this.frame.setSize(800, 600); // 400 width and 500 height
         this.frame.setLayout(null); // using no layout managers
         this.frame.setVisible(true); // making the frame visible
+
+        createNewFileTab();
+        
+        createSettingsTab();
 
     }
 
@@ -253,14 +252,26 @@ public class gui {
    
     }
 
+
+
+
+    
     private void createSettingsTab(){
-        
-        //#region Settings Tab
         JPanel settings = new JPanel();
         settings.setBackground(new Color(200,200,255));
+        settings.setLayout(null);// let setBounds work
+        this.panels.add(settings);
         this.tabs.insertTab("Settings", null, settings, "Personalise your experience", 0);
 
-        //#region Valid Character Lists
+        createCharacterListPanel(settings);
+        
+        createPasswordPolicyPanel(settings);
+
+        createWordlistPanel(settings);
+
+    }
+
+    public void createCharacterListPanel(JPanel settings){
         JPanel characterPanel = new JPanel();
         characterPanel.setBounds(10,10,385,255);
         characterPanel.setLayout(null);
@@ -280,10 +291,9 @@ public class gui {
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
         symbolCheckBox.setBounds(10, 130, 220, 20);
         characterPanel.add(symbolCheckBox);
-        //#endregion Valid Character Lists
+    }
 
-        //#region Password Policies
-
+    public void createPasswordPolicyPanel(JPanel settings){
         JPanel policyPanel = new JPanel();
         policyPanel.setBounds(10,275,385,255);
         policyPanel.setLayout(null);
@@ -304,81 +314,80 @@ public class gui {
         specialCheckBox.setBounds(10, 130, 180, 40);
         policyPanel.add(specialCheckBox);
 
-
-        //#endregion Password Policies
-        
-        //#region Wordlists
-        JPanel wordlistPanel = new JPanel();
-        wordlistPanel.setBounds(405,10,385,600);
-        wordlistPanel.setLayout(null);
-        settings.add(wordlistPanel);
-        JLabel wordListsText = new JLabel("Wordlists:");// word lists
-        wordListsText.setBounds(10, 10, 100, 40);
-        wordlistPanel.add(wordListsText);
-        // getting list of wordlists
-        JComboBox wordBox = new JComboBox(new String[0]);
-        try {
-            File wordFile = new File("../hashcat/CustomWordlists");
-            for (File i : wordFile.listFiles()) {
-                wordBox.addItem(i.getName());
-            }
-        } catch (Exception e) {
-            System.out.println("Hashcat folder not found");
-        }
-        
-        wordBox.setBounds(10, 40, 150, 20);
-        wordlistPanel.add(wordBox);
-        JButton selectList = new JButton("Use this list");
-        selectList.setMargin(new Insets(0, 0, 0, 0));
-        selectList.setBounds(10, 70, 75, 20);
-        selectList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(selectList);
-        JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
-        createListTitle.setBounds(10, 100, 100, 40);// sets position and size
-        createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
-        wordlistPanel.add(createListTitle);// adds it to page
-        JButton combineList = new JButton("Combine Lists");
-        combineList.setMargin(new Insets(0, 0, 0, 0));
-        combineList.setBounds(10, 130, 90, 20);
-        combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
-        combineList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(combineList);
-        JButton uploadList = new JButton("Upload Custom Lists");
-        uploadList.setMargin(new Insets(0, 0, 0, 0));
-        uploadList.setBounds(10, 160, 130, 20);
-        uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
-        uploadList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(uploadList);
-        JButton personalList = new JButton("Create Personal List");
-        personalList.setMargin(new Insets(0, 0, 0, 0));
-        personalList.setBounds(10, 190, 130, 20);
-        personalList.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    main_file.createPersonalList();
-                } catch (IOException e1) {
-                    System.out.println("main_file.createPersonalList() failed!!!");
-                    e1.printStackTrace();
-                }
-                wordBox.addItem("personalList.txt");
-                
-
-                
-            }
-        });
-        personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
-        personalList.setBackground(new Color(255,179,71));
-
-
-        //#endregion Wordlists
-        wordlistPanel.add(personalList);
-        settings.setLayout(null);// let setBounds work
-        this.panels.add(settings);
-        //#endregion Settings Tab
-
     }
-    // #region Getters and Setters
+
+    public void createWordlistPanel(JPanel settings){
+
+                JPanel wordlistPanel = new JPanel();
+                wordlistPanel.setBounds(405,10,385,600);
+                wordlistPanel.setLayout(null);
+                settings.add(wordlistPanel);
+                JLabel wordListsText = new JLabel("Wordlists:");// word lists
+                wordListsText.setBounds(10, 10, 100, 40);
+                wordlistPanel.add(wordListsText);
+                // getting list of wordlists
+                JComboBox wordBox = new JComboBox(new String[0]);
+                try {
+                    File wordFile = new File("../hashcat/CustomWordlists");
+                    for (File i : wordFile.listFiles()) {
+                        wordBox.addItem(i.getName());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Hashcat folder not found");
+                }
+                
+                wordBox.setBounds(10, 40, 150, 20);
+                wordlistPanel.add(wordBox);
+                JButton selectList = new JButton("Use this list");
+                selectList.setMargin(new Insets(0, 0, 0, 0));
+                selectList.setBounds(10, 70, 75, 20);
+                selectList.setBackground(new Color(255,105,97));
+                wordlistPanel.add(selectList);
+                JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
+                createListTitle.setBounds(10, 100, 100, 40);// sets position and size
+                createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
+                wordlistPanel.add(createListTitle);// adds it to page
+                JButton combineList = new JButton("Combine Lists");
+                combineList.setMargin(new Insets(0, 0, 0, 0));
+                combineList.setBounds(10, 130, 90, 20);
+                combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
+                combineList.setBackground(new Color(255,105,97));
+                wordlistPanel.add(combineList);
+                JButton uploadList = new JButton("Upload Custom Lists");
+                uploadList.setMargin(new Insets(0, 0, 0, 0));
+                uploadList.setBounds(10, 160, 130, 20);
+                uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
+                uploadList.setBackground(new Color(255,105,97));
+                wordlistPanel.add(uploadList);
+                JButton personalList = new JButton("Create Personal List");
+                personalList.setMargin(new Insets(0, 0, 0, 0));
+                personalList.setBounds(10, 190, 130, 20);
+                personalList.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            main_file.createPersonalList();
+                        } catch (IOException e1) {
+                            System.out.println("main_file.createPersonalList() failed!!!");
+                            e1.printStackTrace();
+                        }
+                        wordBox.addItem("personalList.txt");
+                        
+        
+                        
+                    }
+                });
+                personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
+                personalList.setBackground(new Color(255,179,71));
+        
+        
+                wordlistPanel.add(personalList);
+    }
+
+
+
+
+
     public JFrame getFrame() {
         return frame;
     }
@@ -402,6 +411,5 @@ public class gui {
     public void setPanels(ArrayList<JPanel> panels) {
         this.panels = panels;
     }
-    // #endregion Getters and Setters
 
 }

@@ -13,13 +13,29 @@ public class passwordCheck extends SwingWorker<String,Object> {
     @Override
     protected String doInBackground() throws Exception {
         //this is the background process, where the password check can be done
-        
+        // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
         //TODO we are going to break this down, because it gets up to like 5gb of array, just split the list into blocks of idk 3,000,000 characters and run them each seperately
-
+        //TODO add a break if a perfect match is found 
         System.out.print("Wordlist characters :");
         System.out.println(main_file.selected_wordlist_string.length());
-        return "";
-        //return Integer.toString(approxStringMatch(this.pattern));
+        System.out.println((10/11)+1);
+        int bestMatch = 999;
+        int newMatch;
+        for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){
+            //System.out.print("Block : ");
+            //System.out.println(i);
+            
+            try {
+                newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1),3000000*i));
+            } catch (Exception e) {
+                newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1)));
+            }
+            if (newMatch<bestMatch){
+                bestMatch = newMatch;
+            }
+        }
+
+        return Integer.toString(bestMatch);
     }
 
     protected void done(){
@@ -40,17 +56,16 @@ public class passwordCheck extends SwingWorker<String,Object> {
     }
 
 
-    private int approxStringMatch(String pattern){
+    private int approxStringMatch(String pattern,String text){
         String[] patternArray = pattern.split("");
-        String[] textArray = main_file.selected_wordlist_string.split("");
-        int[][] matrix = new int[pattern.length()+1][main_file.selected_wordlist_string.length()+1];
+        String[] textArray = text.split("");
+        byte[][] matrix = new byte[pattern.length()+1][text.length()+1];
         
         //prime the matrix
        
-        for (int i = 0 ; i < matrix.length ; i++  ){
+        for (byte i = 0 ; i < matrix.length ; i++  ){
             matrix[i][0] = i;
         }
-        System.out.println("Matrix Primed");
         //compute matrix
         for (int j = 0 ; j< textArray.length ;j++){
             for (int i = 0 ; i< patternArray.length ;i++){
@@ -58,12 +73,13 @@ public class passwordCheck extends SwingWorker<String,Object> {
                 if (patternArray[i].equals(textArray[j])){
                     matrix[i+1][j+1] = matrix[i][j];
                 } else {
-                    matrix[i+1][j+1] = Math.min(Math.min(matrix[i][j],matrix[i+1][j]),matrix[i][j+1])+1;
+                    matrix[i+1][j+1] = (byte) (Math.min(Math.min(matrix[i][j],matrix[i+1][j]),matrix[i][j+1])+1);
                 }
             }
+            
         }
         //printMatrix(matrix);
-        System.out.println(getMatch(matrix, textArray));
+        //System.out.println(getMatch(matrix, textArray));
         Arrays.sort(matrix[matrix.length-1]);
         return matrix[matrix.length-1][0];
     }
@@ -81,7 +97,7 @@ public class passwordCheck extends SwingWorker<String,Object> {
         }
     }
 
-    private String getMatch(int[][] matrix,String[] textArray){
+    private String getMatch(byte[][] matrix,String[] textArray){
         int lowestJ = 0;
         int lowest = 999;
         String match = "";

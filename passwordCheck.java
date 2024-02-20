@@ -16,21 +16,21 @@ public class passwordCheck extends SwingWorker<String,Object> {
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
         //TODO we are going to break this down, because it gets up to like 5gb of array, just split the list into blocks of idk 3,000,000 characters and run them each seperately
         //TODO add a break if a perfect match is found 
-        System.out.print("Wordlist characters :");
-        System.out.println(main_file.selected_wordlist_string.length());
-        System.out.println((10/11)+1);
+        //TODO add a progress bar
         int bestMatch = 999;
         int newMatch;
         for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){
-            //System.out.print("Block : ");
-            //System.out.println(i);
+            
             
             try {
                 newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1),3000000*i));
             } catch (Exception e) {
                 newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1)));
             }
-            if (newMatch<bestMatch){
+            if (newMatch == 0){// early break on perfect match
+                bestMatch = 0;
+                break;
+            } else if (newMatch<bestMatch){
                 bestMatch = newMatch;
             }
         }
@@ -76,19 +76,22 @@ public class passwordCheck extends SwingWorker<String,Object> {
                     matrix[i+1][j+1] = (byte) (Math.min(Math.min(matrix[i][j],matrix[i+1][j]),matrix[i][j+1])+1);
                 }
             }
+            if (matrix[patternArray.length][j+1] == 0){//break early on perfect match
+                return 0;
+            }
+
             
         }
-        //printMatrix(matrix);
-        //System.out.println(getMatch(matrix, textArray));
         Arrays.sort(matrix[matrix.length-1]);
+        getMatch(matrix, textArray);
         return matrix[matrix.length-1][0];
     }
 
 
 
     @SuppressWarnings("unused")
-    private void printMatrix(int[][] matrix){
-        for (int[] i : matrix){
+    private void printMatrix(byte[][] matrix){
+        for (byte[] i : matrix){
             for (int j : i){
                 System.out.print(j);
                 System.out.print(" ");
@@ -97,9 +100,10 @@ public class passwordCheck extends SwingWorker<String,Object> {
         }
     }
 
+    @SuppressWarnings("unused")
     private String getMatch(byte[][] matrix,String[] textArray){
         int lowestJ = 0;
-        int lowest = 999;
+        int lowest = 126;
         String match = "";
         //find lowest one in last row
         
@@ -110,6 +114,7 @@ public class passwordCheck extends SwingWorker<String,Object> {
             }
         }
         //match = match + textArray[lowestJ-1];
+        
         if (lowestJ > 1){
         for (int i= matrix.length-2 ; i>=0 ;i--){
             if (matrix[i][lowestJ]<matrix[i][lowestJ-1]){

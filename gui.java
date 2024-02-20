@@ -5,10 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -33,10 +34,9 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class gui {
     private JFrame frame;
-    JTabbedPane tabs;
+    private JTabbedPane tabs;
     private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
-
     public gui() {
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
@@ -46,7 +46,6 @@ public class gui {
         this.frame.setSize(800, 600); // 400 width and 500 height
         this.frame.setLayout(null); // using no layout managers
         this.frame.setVisible(true); // making the frame visible
-
         createNewFileTab();
         
         createSettingsTab();
@@ -109,7 +108,7 @@ public class gui {
 
     private void createRightPanel(JPanel newpanel){
         //TODO add all different mutation types
-        
+        //TODO a tree with one node cannot be reselected of a different tree has been selected since
         JPanel newRightPanel = new JPanel();//setting up right panel
         newpanel.add(newRightPanel);
         newRightPanel.setBounds(405, 10, 385, 600);
@@ -178,10 +177,12 @@ public class gui {
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                passwordCheck checker = new passwordCheck(main_file.selected_node.getWord(),"martin");
-                //TODO add file handling, maybe just concat the whole file (make sure to remove endlines ) and patternmatch against the whole thing?
-                //that might need a function of its own
-                checker.execute();
+                if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
+                    passwordCheck checker = new passwordCheck(main_file.selected_node.getWord());//TODO make this read the selected wordlist, should be easy enough
+                    checker.execute();
+                } else {
+                    System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup
+                }
             }});
             
 
@@ -228,7 +229,6 @@ public class gui {
         }
         
     }
-    
 
     private JTree createNewTree(String rootPassword){
          node newNode = new node(rootPassword, null,null,null);
@@ -258,6 +258,7 @@ public class gui {
          return tree;
          
     }
+
 
     private void createSettingsTab(){
         JPanel settings = new JPanel();
@@ -341,11 +342,31 @@ public class gui {
                 
                 wordBox.setBounds(10, 40, 150, 20);
                 wordlistPanel.add(wordBox);
+               
                 JButton selectList = new JButton("Use this list");
                 selectList.setMargin(new Insets(0, 0, 0, 0));
                 selectList.setBounds(10, 70, 75, 20);
-                selectList.setBackground(new Color(255,105,97));
+                selectList.setBackground(new Color(255,179,71));
                 wordlistPanel.add(selectList);
+                selectList.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        selectList.setEnabled(false);
+                        main_file.selected_wordlist_string = wordlistToString((String)wordBox.getSelectedItem());
+                        main_file.selected_wordlist_name = (String)wordBox.getSelectedItem();
+                    }
+                    
+                });
+                wordBox.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (wordBox.getSelectedItem() != main_file.selected_wordlist_name){
+                            selectList.setEnabled(true);
+                        } else {
+                            selectList.setEnabled(false);
+                        }
+                    }
+                });
                 JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
                 createListTitle.setBounds(10, 100, 100, 40);// sets position and size
                 createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
@@ -387,8 +408,14 @@ public class gui {
                 wordlistPanel.add(personalList);
     }
 
-
-
+    private String wordlistToString(String filename){
+        try {
+            return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+        return "";
+    }
 
 
     public JFrame getFrame() {

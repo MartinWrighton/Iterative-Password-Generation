@@ -1,25 +1,30 @@
+
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
-
 import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
 public class passwordCheck extends SwingWorker<String,Object> {
     private String pattern;
-    private String text;
-    public  passwordCheck(String pattern, String text){
+    public  passwordCheck(String pattern){
         this.pattern = pattern;
-        this.text = text;
     }
 
     @Override
     protected String doInBackground() throws Exception {
-        //TODO this is the background process, where the password check can be done
-        return Integer.toString(approxStringMatch(this.pattern, this.text));
+        //this is the background process, where the password check can be done
+        
+        //TODO we are going to break this down, because it gets up to like 5gb of array, just split the list into blocks of idk 3,000,000 characters and run them each seperately
+
+        System.out.print("Wordlist characters :");
+        System.out.println(main_file.selected_wordlist_string.length());
+        return "";
+        //return Integer.toString(approxStringMatch(this.pattern));
     }
+
     protected void done(){
-        //TODO this is where the gui gets updated at the end
-        JLabel current_page_title = (JLabel) main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
+        //this is where the gui gets updated at the end
+        JLabel current_page_title = (JLabel) main_file.gui.getTabs().getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
         try {
             
             current_page_title.setText(get());
@@ -35,17 +40,17 @@ public class passwordCheck extends SwingWorker<String,Object> {
     }
 
 
-    private int approxStringMatch(String pattern,String text){
+    private int approxStringMatch(String pattern){
         String[] patternArray = pattern.split("");
-        String[] textArray = text.split("");
-        int[][] matrix = new int[pattern.length()+1][text.length()+1];
+        String[] textArray = main_file.selected_wordlist_string.split("");
+        int[][] matrix = new int[pattern.length()+1][main_file.selected_wordlist_string.length()+1];
         
         //prime the matrix
        
         for (int i = 0 ; i < matrix.length ; i++  ){
             matrix[i][0] = i;
         }
-
+        System.out.println("Matrix Primed");
         //compute matrix
         for (int j = 0 ; j< textArray.length ;j++){
             for (int i = 0 ; i< patternArray.length ;i++){
@@ -55,10 +60,9 @@ public class passwordCheck extends SwingWorker<String,Object> {
                 } else {
                     matrix[i+1][j+1] = Math.min(Math.min(matrix[i][j],matrix[i+1][j]),matrix[i][j+1])+1;
                 }
-                System.out.println("");
+            }
         }
-        }
-        printMatrix(matrix);
+        //printMatrix(matrix);
         System.out.println(getMatch(matrix, textArray));
         Arrays.sort(matrix[matrix.length-1]);
         return matrix[matrix.length-1][0];
@@ -66,6 +70,7 @@ public class passwordCheck extends SwingWorker<String,Object> {
 
 
 
+    @SuppressWarnings("unused")
     private void printMatrix(int[][] matrix){
         for (int[] i : matrix){
             for (int j : i){
@@ -77,7 +82,6 @@ public class passwordCheck extends SwingWorker<String,Object> {
     }
 
     private String getMatch(int[][] matrix,String[] textArray){
-        //TODO something here is array index erroring
         int lowestJ = 0;
         int lowest = 999;
         String match = "";
@@ -90,22 +94,26 @@ public class passwordCheck extends SwingWorker<String,Object> {
             }
         }
         //match = match + textArray[lowestJ-1];
-
-        System.out.println(lowestJ);
+        if (lowestJ > 1){
         for (int i= matrix.length-2 ; i>=0 ;i--){
             if (matrix[i][lowestJ]<matrix[i][lowestJ-1]){
                 
             } else {
                 match = textArray[lowestJ-1] + match;
                 lowestJ = lowestJ-1;
-                
+                if (lowestJ == 0){
+                    break;
+                }
             }
             System.out.print(lowestJ);
             System.out.print(" : ");
             System.out.println(match);
         }
+        } else {
+            match = match + textArray[0];
+        }
         return match;
             
     }
-    
+
 }

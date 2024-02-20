@@ -7,7 +7,10 @@ import javax.swing.UIManager;
 
 public class main_file {
     public static node selected_node;
+    public static String selected_wordlist_string;
+    public static String selected_wordlist_name;
     public static gui gui;
+
     public static void main(String[] args) throws IOException {
         try {//TODO do we want windows or java L&F
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

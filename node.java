@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -10,13 +10,14 @@ public class node {
     private ArrayList<node> children;
     private DefaultMutableTreeNode treeNode;
     private DefaultTreeModel treeModel;
-
-    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel){
+    private JPanel rightPanel;
+    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,JPanel rightPanel){
         this.word = word;
         this.children = new ArrayList<node>();
         this.parent = parent;
         this.treeNode = treeNode;
         this.treeModel = treeModel;
+        this.rightPanel = rightPanel;
     }
 
 
@@ -26,9 +27,9 @@ public class node {
         return this.word;
     }
 
-    public void addChild(String name){
+    public node addChild(String name){
         //System.out.print("addChild ");
-        node newNode = new node(name, this, null,this.treeModel);//create the new node
+        node newNode = new node(name, this, null,this.treeModel,null);//create the new node
         //System.out.print("newNode ");
         DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);// create the new treeNode holding the node
         //System.out.print("newTreeNode ");
@@ -39,6 +40,7 @@ public class node {
         this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
         //System.out.println("addTreeNode");
         this.treeModel.reload();
+        return newNode;
     };
 
 
@@ -81,6 +83,10 @@ public class node {
         return this.treeModel;
     }
 
+    public JPanel getRightPanel(){
+        return this.rightPanel;
+    }
+
     public void setWord(String word) {
         this.word = word;
     }
@@ -103,6 +109,10 @@ public class node {
 
     public void setTreeModel(DefaultTreeModel treeModel){
         this.treeModel = treeModel;
+    }
+
+    public void setRightPanel(JPanel rightpanel){
+        this.rightPanel = rightpanel;
     }
     
 }

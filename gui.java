@@ -89,8 +89,6 @@ public class gui {
 
         createLeftPanel(newpanel,rootPassword);
         
-        createRightPanel(newpanel);
-
     }
         
     private void createLeftPanel(JPanel newpanel,String rootPassword){
@@ -101,23 +99,24 @@ public class gui {
         newLeftPanel.setLayout(null);
 
         //create tree and place in left panel
-        JTree tree = createNewTree(rootPassword);
+        JTree tree = createNewTree(rootPassword,newpanel);
         tree.setBounds(10, 10, 375, 670);
         newLeftPanel.add(tree);
         trees.add(tree);
     }
 
-    private void createRightPanel(JPanel newpanel){
+    private JPanel createRightPanel(String title,JPanel parent){
         //TODO add all different mutation types
         //TODO a tree with one node cannot be reselected of a different tree has been selected since
         JPanel newRightPanel = new JPanel();//setting up right panel
-        newpanel.add(newRightPanel);
+        parent.add(newRightPanel);
+        newRightPanel.setVisible(false);
         newRightPanel.setBounds(405, 10, 385, 600);
         newRightPanel.setLayout(null);
         
 
         //adding titles to right panel
-        JLabel currentNodeLabel = new JLabel("-"); //MOVING THIS WILL PROVENT IT FROM WORKING (SEE TREE LISTENER) (this is a poor workaround)
+        JLabel currentNodeLabel = new JLabel(title); 
         currentNodeLabel.setBounds(10, 0, 300, 20);
         currentNodeLabel.setFont(new Font("Serif", Font.PLAIN, 20));
         newRightPanel.add(currentNodeLabel);
@@ -190,11 +189,13 @@ public class gui {
                 }
             }});
             
-
+            return newRightPanel;
     }
 
     private void createChildNode(ActionEvent e){
         if(main_file.selected_node != null){
+            //newly created node stored here
+            node newNode = new node(null, null, null, null, null);
             //we will need a randomizer
             Random random = new Random();
             
@@ -216,7 +217,7 @@ public class gui {
                         frontPad = frontPad +(Integer.toString(random.nextInt(10)));
                         backPad = backPad +(Integer.toString(random.nextInt(10)));
                     }
-                    main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                    newNode = main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
                 } else {//dialogue box
                     JDialog dialog = new JDialog(main_file.gui.frame,"Your policy does not allow numbers!",true);
                     dialog.setSize(300,20);
@@ -229,14 +230,18 @@ public class gui {
                 //capitalize
             } else {
                 //else
-                main_file.selected_node.addChild(new Date().toString());//date is the test name
+                newNode = main_file.selected_node.addChild(new Date().toString());//date is the test name
+            }
+
+            if (newNode.getWord() != null){
+                newNode.setRightPanel(createRightPanel(newNode.getWord(),(JPanel) main_file.gui.tabs.getSelectedComponent()));
             }
         }
         
     }
 
-    private JTree createNewTree(String rootPassword){
-         node newNode = new node(rootPassword, null,null,null);
+    private JTree createNewTree(String rootPassword,JPanel parentPanel){
+         node newNode = new node(rootPassword, null,null,null,createRightPanel(rootPassword,parentPanel));
          DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our node class
          newNode.setTreeNode(rootNode);
          DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
@@ -251,11 +256,10 @@ public class gui {
                  if (clicked_node == null) {
                      return;
                  }
+                 
                  main_file.selected_node = (node) clicked_node.getUserObject();//save clicked node (as a node object)
-
-                 //setting text on right panel THIS WORKS BY PIXEL PLACEMENT AND WIL BREAK IF YOU MOVE THE COMPONENTS
-                 JLabel current_page_title = (JLabel) main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
-                 current_page_title.setText(clicked_node.toString());
+                 main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).setVisible(false);
+                 ((node) clicked_node.getUserObject()).getRightPanel().setVisible(true);
              }
  
          });

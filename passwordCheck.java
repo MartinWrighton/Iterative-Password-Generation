@@ -18,7 +18,7 @@ public class passwordCheck extends SwingWorker<String,Integer> {
     protected String doInBackground() throws Exception {
         //this is the background process, where the password check can be done
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
-        //TODO changing selected node keeps the progressbar, we might need to give each node its own right panel,might not actually be too hard
+        //TODO panels are still using the same progressbar
         int bestMatch = 999;
         int newMatch;
         for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){
@@ -36,7 +36,7 @@ public class passwordCheck extends SwingWorker<String,Integer> {
                 bestMatch = newMatch;
             }
 
-            publish((i*100) / (main_file.selected_wordlist_string.length()/3000000));
+            publish((i*100) / ((main_file.selected_wordlist_string.length()/3000000)+1));
         }
         return Integer.toString(bestMatch);
     }
@@ -145,7 +145,6 @@ public class passwordCheck extends SwingWorker<String,Integer> {
     @Override
     protected void process(List<Integer> chunks){
         for (int number : chunks) {
-            System.out.println(number);
             this.progressBar.setValue(number);
         }
     }

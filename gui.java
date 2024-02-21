@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -170,6 +171,10 @@ public class gui {
         JSpinner howManySpin = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
         howManySpin.setBounds(200, 170, 40, 20);
         newRightPanel.add(howManySpin);
+        
+        JProgressBar progressBar = new JProgressBar(0,100);
+        progressBar.setBounds(10, 340, 350, 20);
+        newRightPanel.add(progressBar);
 
         JButton goTest = new JButton("Test");
         goTest.setBounds(10, 300, 80, 20);
@@ -178,7 +183,7 @@ public class gui {
             @Override
             public void actionPerformed(ActionEvent e){
                 if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
-                    passwordCheck checker = new passwordCheck(main_file.selected_node.getWord());//TODO make this read the selected wordlist, should be easy enough
+                    passwordCheck checker = new passwordCheck(main_file.selected_node.getWord(),progressBar);
                     checker.execute();
                 } else {
                     System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup

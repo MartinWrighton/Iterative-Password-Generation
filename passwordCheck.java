@@ -1,22 +1,24 @@
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-public class passwordCheck extends SwingWorker<String,Object> {
+public class passwordCheck extends SwingWorker<String,Integer> {
     private String pattern;
-    public  passwordCheck(String pattern){
+    private JProgressBar progressBar;
+    public  passwordCheck(String pattern,JProgressBar progressBar){
         this.pattern = pattern;
+        this.progressBar = progressBar;
     }
 
     @Override
     protected String doInBackground() throws Exception {
         //this is the background process, where the password check can be done
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
-        //TODO we are going to break this down, because it gets up to like 5gb of array, just split the list into blocks of idk 3,000,000 characters and run them each seperately
-        //TODO add a break if a perfect match is found 
-        //TODO add a progress bar
+        //TODO changing selected node keeps the progressbar, we might need to give each node its own right panel,might not actually be too hard
         int bestMatch = 999;
         int newMatch;
         for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){
@@ -33,8 +35,9 @@ public class passwordCheck extends SwingWorker<String,Object> {
             } else if (newMatch<bestMatch){
                 bestMatch = newMatch;
             }
-        }
 
+            publish((i*100) / (main_file.selected_wordlist_string.length()/3000000));
+        }
         return Integer.toString(bestMatch);
     }
 
@@ -53,6 +56,7 @@ public class passwordCheck extends SwingWorker<String,Object> {
             // Auto-generated catch block
             e.printStackTrace();
         }
+        this.progressBar.setValue(100);
     }
 
 
@@ -82,8 +86,9 @@ public class passwordCheck extends SwingWorker<String,Object> {
 
             
         }
+
+        
         Arrays.sort(matrix[matrix.length-1]);
-        getMatch(matrix, textArray);
         return matrix[matrix.length-1][0];
     }
 
@@ -137,4 +142,11 @@ public class passwordCheck extends SwingWorker<String,Object> {
             
     }
 
+    @Override
+    protected void process(List<Integer> chunks){
+        for (int number : chunks) {
+            System.out.println(number);
+            this.progressBar.setValue(number);
+        }
+    }
 }

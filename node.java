@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.AbstractButton;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -11,6 +16,7 @@ public class node {
     private DefaultMutableTreeNode treeNode;
     private DefaultTreeModel treeModel;
     private JPanel rightPanel;
+    private ArrayList<String> issues;
     public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,JPanel rightPanel){
         this.word = word;
         this.children = new ArrayList<node>();
@@ -18,6 +24,7 @@ public class node {
         this.treeNode = treeNode;
         this.treeModel = treeModel;
         this.rightPanel = rightPanel;
+        this.issues = new ArrayList<String>();
     }
 
 
@@ -40,10 +47,44 @@ public class node {
         this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
         //System.out.println("addTreeNode");
         this.treeModel.reload();
+        newNode.policyCheck();
         return newNode;
     };
 
+    public void policyCheck(){
+        //TODO find out how to change the icons for swing trees
+        //get policy requirements
+        boolean minCharacters = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,40)).isSelected();
+        boolean needCapital = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,70)).isSelected();
+        boolean needNumber = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,100)).isSelected();
+        boolean needSymbol = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,130)).isSelected();
+        
+        int minNum = (int) ((JSpinner) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(73,40)).getValue();
 
+        //Analysis of passwords
+        boolean hasCapital,hasNumber,hasSymbol;
+        Pattern Cap = Pattern.compile("\\p{Upper}");
+        Pattern Num = Pattern.compile("\\d");
+        Pattern Sym = Pattern.compile ("\\p{Punct}");
+        hasCapital = Cap.matcher(this.word).find();
+        hasNumber = Num.matcher(this.word).find();
+        hasSymbol = Sym.matcher(this.word).find();
+
+
+        if (minCharacters && this.word.length()<minNum){
+            this.issues.add("POLICY: Your policy requires passwords of at least "+minNum+" characters");
+        }
+        if (needCapital && !hasCapital){
+            this.issues.add("POLICY: Your policy requires at least one capital letter");
+        }
+        if (needNumber && !hasNumber){
+            this.issues.add("POLICY: Your policy requires at least one number");
+        }
+        if (needSymbol && !hasSymbol){
+            this.issues.add("POLICY: Your policy requires at least one symbol");
+        }
+
+    }
 
 
 

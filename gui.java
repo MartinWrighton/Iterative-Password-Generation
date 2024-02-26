@@ -193,13 +193,12 @@ public class gui {
     }
 
     private void createChildNode(ActionEvent e){
+        //TODO all non-root nodes are using the same rightpanel??
         if(main_file.selected_node != null){
             //newly created node stored here
             node newNode = new node(null, null, null, null, null);
             //we will need a randomizer
             Random random = new Random();
-            
-
             //source of event is the button
             JButton gButton = (JButton) e.getSource();
             //Right panel is the parent
@@ -240,6 +239,8 @@ public class gui {
         
     }
 
+    
+
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
          node newNode = new node(rootPassword, null,null,null,createRightPanel(rootPassword,parentPanel));
          DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our node class
@@ -248,7 +249,7 @@ public class gui {
          newNode.setTreeModel(treeModel);
          JTree tree = new JTree(treeModel);
          tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-
+        newNode.policyCheck();//check for policies
          tree.addTreeSelectionListener(new TreeSelectionListener() {//when node is clicked
              @Override
              public void valueChanged(TreeSelectionEvent e) {
@@ -260,6 +261,7 @@ public class gui {
                  main_file.selected_node = (node) clicked_node.getUserObject();//save clicked node (as a node object)
                  main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).setVisible(false);
                  ((node) clicked_node.getUserObject()).getRightPanel().setVisible(true);
+                 //TODO when a lower nodes spinner is changed, and you switch to a higher node, that higher node temporarily shows the wrong spinner
              }
  
          });
@@ -285,6 +287,7 @@ public class gui {
     }
 
     public void createCharacterListPanel(JPanel settings){
+        //TODO implement character lists
         JPanel characterPanel = new JPanel();
         characterPanel.setBounds(10,10,385,255);
         characterPanel.setLayout(null);
@@ -307,6 +310,7 @@ public class gui {
     }
 
     public void createPasswordPolicyPanel(JPanel settings){
+        //TODO implement password policy
         JPanel policyPanel = new JPanel();
         policyPanel.setBounds(10,275,385,255);
         policyPanel.setLayout(null);
@@ -314,17 +318,23 @@ public class gui {
         JLabel policyText = new JLabel("Required Policy:");// policy
         policyText.setBounds(10, 10, 100, 12);
         policyPanel.add(policyText);
-        JCheckBox lengthCheckBox = new JCheckBox("At least ___ characters");//these are all allowed characters by the IBM Business Automation Workflow
-        lengthCheckBox.setBounds(10, 40, 180, 40);
+        JCheckBox lengthCheckBox = new JCheckBox("At least");//these are all allowed characters by the IBM Business Automation Workflow
+        lengthCheckBox.setBounds(10, 40, 62, 15);
         policyPanel.add(lengthCheckBox);
+        JSpinner lengthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
+        lengthSpinner.setBounds(73, 40, 35, 15);
+        policyPanel.add(lengthSpinner);
+        JLabel lengthEndLabel = new JLabel("characters");
+        lengthEndLabel.setBounds(110, 40, 180, 15);
+        policyPanel.add(lengthEndLabel);
         JCheckBox capitalCheckBox = new JCheckBox("Must include a capital letter");//these are all allowed characters by the IBM Business Automation Workflow
-        capitalCheckBox.setBounds(10, 70, 200, 40);
+        capitalCheckBox.setBounds(10, 70, 200, 15);
         policyPanel.add(capitalCheckBox);
         JCheckBox numeralCheckBox = new JCheckBox("Must include a number");//these are all allowed characters by the IBM Business Automation Workflow
-        numeralCheckBox.setBounds(10, 100, 180, 40);
+        numeralCheckBox.setBounds(10, 100, 180, 15);
         policyPanel.add(numeralCheckBox);
         JCheckBox specialCheckBox = new JCheckBox("Must include a symbol");//these are all allowed characters by the IBM Business Automation Workflow
-        specialCheckBox.setBounds(10, 130, 180, 40);
+        specialCheckBox.setBounds(10, 130, 180, 15);
         policyPanel.add(specialCheckBox);
 
     }

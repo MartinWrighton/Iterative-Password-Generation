@@ -12,6 +12,7 @@ public class passwordCheck extends SwingWorker<String,Integer> {
     public  passwordCheck(String pattern,JProgressBar progressBar){
         this.pattern = pattern;
         this.progressBar = progressBar;
+        //TODO uses the root nodes title to display results, even if we are testing a child
     }
 
     @Override
@@ -19,6 +20,7 @@ public class passwordCheck extends SwingWorker<String,Integer> {
         //this is the background process, where the password check can be done
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
         //TODO panels are still using the same progressbar
+        //TODO lock the test button until test is finished
         int bestMatch = 999;
         int newMatch;
         for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){

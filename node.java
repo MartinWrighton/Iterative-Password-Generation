@@ -25,6 +25,9 @@ public class node {
         this.treeModel = treeModel;
         this.rightPanel = rightPanel;
         this.issues = new ArrayList<String>();
+        if (this.word != null){
+            policyCheck();
+        }
     }
 
 
@@ -47,7 +50,6 @@ public class node {
         this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
         //System.out.println("addTreeNode");
         this.treeModel.reload();
-        newNode.policyCheck();
         return newNode;
     };
 
@@ -72,16 +74,16 @@ public class node {
 
 
         if (minCharacters && this.word.length()<minNum){
-            this.issues.add("POLICY: Your policy requires passwords of at least "+minNum+" characters");
+            this.issues.add("POLICY: Your policy requires passwords of at least "+minNum+" characters\n");
         }
         if (needCapital && !hasCapital){
-            this.issues.add("POLICY: Your policy requires at least one capital letter");
+            this.issues.add("POLICY: Your policy requires at least one capital letter\n");
         }
         if (needNumber && !hasNumber){
-            this.issues.add("POLICY: Your policy requires at least one number");
+            this.issues.add("POLICY: Your policy requires at least one number\n");
         }
         if (needSymbol && !hasSymbol){
-            this.issues.add("POLICY: Your policy requires at least one symbol");
+            this.issues.add("POLICY: Your policy requires at least one symbol\n");
         }
 
     }
@@ -128,8 +130,13 @@ public class node {
         return this.rightPanel;
     }
 
+    public ArrayList<String> getIssues(){
+        return this.issues;
+    }
+
     public void setWord(String word) {
         this.word = word;
+        policyCheck();
     }
 
     public void setStrength(int strength) {

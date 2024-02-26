@@ -23,6 +23,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -105,7 +106,7 @@ public class gui {
         trees.add(tree);
     }
 
-    private JPanel createRightPanel(String title,JPanel parent){
+    private JPanel createRightPanel(String title,JPanel parent,node newNode){
         //TODO add all different mutation types
         //TODO a tree with one node cannot be reselected of a different tree has been selected since
         JPanel newRightPanel = new JPanel();//setting up right panel
@@ -129,6 +130,10 @@ public class gui {
         JLabel rightPanelTestLabel = new JLabel("Test this Node:");
         rightPanelTestLabel.setBounds(10, 250, 200, 40);
         newRightPanel.add(rightPanelTestLabel);
+
+        JLabel rightPanelResultsLabel = new JLabel("Results & Issues:");
+        rightPanelResultsLabel.setBounds(10, 350, 200, 40);
+        newRightPanel.add(rightPanelResultsLabel);
 
         JButton goMutate = new JButton("Go (test)"); // setting up mutate button
         goMutate.setBackground(new Color(255,105,97));
@@ -188,12 +193,23 @@ public class gui {
                     System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup
                 }
             }});
-            
-            return newRightPanel;
+        
+        //TODO set font size smaller and implement scroll pane
+        JTextArea resultBox = new JTextArea();
+        resultBox.setBounds(10, 375, 350, 150);
+        newRightPanel.add(resultBox);
+        resultBox.setEditable(false);
+        System.out.println("AA");
+        for (String i : newNode.getIssues()){
+            System.out.println(i);
+            resultBox.append(i);
+        }
+        return newRightPanel;
     }
 
     private void createChildNode(ActionEvent e){
         //TODO all non-root nodes are using the same rightpanel??
+        //TODO and their issues are not displaying
         if(main_file.selected_node != null){
             //newly created node stored here
             node newNode = new node(null, null, null, null, null);
@@ -233,7 +249,7 @@ public class gui {
             }
 
             if (newNode.getWord() != null){
-                newNode.setRightPanel(createRightPanel(newNode.getWord(),(JPanel) main_file.gui.tabs.getSelectedComponent()));
+                newNode.setRightPanel(createRightPanel(newNode.getWord(),(JPanel) main_file.gui.tabs.getSelectedComponent(),newNode));
             }
         }
         
@@ -242,14 +258,14 @@ public class gui {
     
 
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
-         node newNode = new node(rootPassword, null,null,null,createRightPanel(rootPassword,parentPanel));
+         node newNode = new node(rootPassword, null,null,null,null);
+         newNode.setRightPanel(createRightPanel(rootPassword,parentPanel,newNode));
          DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our node class
          newNode.setTreeNode(rootNode);
          DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
          newNode.setTreeModel(treeModel);
          JTree tree = new JTree(treeModel);
          tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        newNode.policyCheck();//check for policies
          tree.addTreeSelectionListener(new TreeSelectionListener() {//when node is clicked
              @Override
              public void valueChanged(TreeSelectionEvent e) {
@@ -310,7 +326,7 @@ public class gui {
     }
 
     public void createPasswordPolicyPanel(JPanel settings){
-        //TODO implement password policy
+        //TODO more password policy options?
         JPanel policyPanel = new JPanel();
         policyPanel.setBounds(10,275,385,255);
         policyPanel.setLayout(null);

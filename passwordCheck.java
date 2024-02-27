@@ -45,15 +45,20 @@ public class passwordCheck extends SwingWorker<String,Integer> {
 
     protected void done(){
         //this is where the gui gets updated at the end
-
+        String result;
         ArrayList<String> issues = this.node.getIssues();
         try {
-            issues.add("TEST: "+main_file.selected_wordlist_name+" was within "+get()+" characters of this password");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            result = get();
+            //TODO actually calculate how bad this is and display it somehow
+            if (result.equals("0")){
+                issues.add("TEST: "+main_file.selected_wordlist_name+" cracked this password\n");
+            } else {
+                issues.add("TEST: "+main_file.selected_wordlist_name+" was within "+result+" character(s) of this password\n");
+            }
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        node.getRightPanel().getComponentAt(10, 300).setEnabled(true);
         node.setIssues(issues);
         gui.updateIssues(this.node);
     }

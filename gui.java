@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -188,21 +189,22 @@ public class gui {
                 if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
                     passwordCheck checker = new passwordCheck(main_file.selected_node,progressBar);
                     checker.execute();
+                    goTest.setEnabled(false);
                 } else {
                     System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup
                 }
             }});
         
-        //TODO set font size smaller and implement scroll pane
         //TODO add a clear/reset button
         JTextArea resultBox = new JTextArea();
-        resultBox.setBounds(10, 375, 350, 150);
-        newRightPanel.add(resultBox);
+        resultBox.setFont(resultBox.getFont().deriveFont(11f));
         resultBox.setEditable(false);
         for (String i : newNode.getIssues()){
-            System.out.println(i);
             resultBox.append(i);
         }
+        JScrollPane scroll = new JScrollPane(resultBox);
+        scroll.setBounds(10, 375, 350, 150);
+        newRightPanel.add(scroll);
         return newRightPanel;
     }
 
@@ -254,10 +256,9 @@ public class gui {
     }
 
     public static void updateIssues(node newNode){
-        JTextArea area = (JTextArea) newNode.getRightPanel().getComponentAt(10,390);
+        JTextArea area = (JTextArea) ((JScrollPane) newNode.getRightPanel().getComponentAt(10,390)).getViewport().getView();
         area.setText("");
         for (String i : newNode.getIssues()){
-            System.out.println(i);
             area.append(i);
         }
 
@@ -365,7 +366,7 @@ public class gui {
     }
 
     public void createWordlistPanel(JPanel settings){
-                //TODO add wordlist handling and clean up the logic into functions
+                //TODO add wordlist handling and clean up the logic into functions, might need to redo a lot of it
                 JPanel wordlistPanel = new JPanel();
                 wordlistPanel.setBounds(405,10,385,600);
                 wordlistPanel.setLayout(null);
@@ -432,7 +433,7 @@ public class gui {
                 personalList.setBounds(10, 190, 130, 20);
                 personalList.addActionListener(new ActionListener(){
                     @Override
-                    public void actionPerformed(ActionEvent e) {
+                    public void actionPerformed(ActionEvent e) {//TODO redo list creation
                         try {
                             main_file.createPersonalList();
                         } catch (IOException e1) {
@@ -456,7 +457,7 @@ public class gui {
         try {
             return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.out.println("File not found");//TODO make this a popup
         }
         return "";
     }

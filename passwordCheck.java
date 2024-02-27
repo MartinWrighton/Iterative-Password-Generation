@@ -20,7 +20,6 @@ public class passwordCheck extends SwingWorker<String,Integer> {
     protected String doInBackground() throws Exception {
         //this is the background process, where the password check can be done
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
-        //TODO lock the test button until test is finished
         int bestMatch = 999;
         int newMatch;
         for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){

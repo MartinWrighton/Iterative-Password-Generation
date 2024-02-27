@@ -56,6 +56,7 @@ public class gui {
     }
 
     private void createNewFileTab(){
+        //TODO fill out this page
         JPanel panel1 = new JPanel();// new page panel
         this.panels.add(panel1);
 
@@ -151,6 +152,7 @@ public class gui {
         JRadioButton mutateRadioButtonT1 = new JRadioButton("Pad Numbers");
         mutateRadioButtonT1.setBounds(10, 80, 150, 20);
         mutateRadioButtonT1.setToolTipText("Create a child by padding the parent with numbers");
+        mutateRadioButtonT1.setSelected(true);
         newRightPanel.add(mutateRadioButtonT1);
         JRadioButton mutateRadioButtonT2 = new JRadioButton("Homoglyph");
         mutateRadioButtonT2.setBounds(10, 110, 150, 20);
@@ -191,11 +193,13 @@ public class gui {
                     checker.execute();
                     goTest.setEnabled(false);
                 } else {
-                    System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup
+                    JDialog dialog = new JDialog(main_file.gui.frame,"ERROR: No wordlist selected!",true);
+                    dialog.setSize(230,20);
+                    dialog.setLocationRelativeTo(main_file.gui.frame);
+                    dialog.setVisible(true);
                 }
             }});
         
-        //TODO add a clear/reset button
         JTextArea resultBox = new JTextArea();
         resultBox.setFont(resultBox.getFont().deriveFont(11f));
         resultBox.setEditable(false);
@@ -205,6 +209,23 @@ public class gui {
         JScrollPane scroll = new JScrollPane(resultBox);
         scroll.setBounds(10, 375, 350, 150);
         newRightPanel.add(scroll);
+
+        JButton clearButton = new JButton("Reset");
+        clearButton.setMargin(new Insets(0,0,0,0));
+        clearButton.setFont(clearButton.getFont().deriveFont(10f));
+        clearButton.setBounds(310, 360, 35, 15);
+        newRightPanel.add(clearButton);
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newNode.setIssues(new ArrayList<String>());
+                newNode.policyCheck();
+                updateIssues(newNode);
+            }
+            
+        });
+
+
         return newRightPanel;
     }
 
@@ -233,8 +254,8 @@ public class gui {
                     }
                     newNode = main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
                 } else {//dialogue box
-                    JDialog dialog = new JDialog(main_file.gui.frame,"Your policy does not allow numbers!",true);
-                    dialog.setSize(300,20);
+                    JDialog dialog = new JDialog(main_file.gui.frame,"POLICY: Your policy does not allow numbers!",true);
+                    dialog.setSize(330,20);
                     dialog.setLocationRelativeTo(main_file.gui.frame);
                     dialog.setVisible(true);
                 }
@@ -323,15 +344,19 @@ public class gui {
         characterPanel.add(allowedCharactersText);
         JCheckBox lowerCaseCheckBox = new JCheckBox("Lower case letters: a-z");//these are all allowed characters by the IBM Business Automation Workflow
         lowerCaseCheckBox.setBounds(10, 40, 180, 20);
+        lowerCaseCheckBox.setSelected(true);
         characterPanel.add(lowerCaseCheckBox);
         JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
         upperCaseCheckBox.setBounds(10, 70, 180, 20);
+        upperCaseCheckBox.setSelected(true);
         characterPanel.add(upperCaseCheckBox);
         JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
         numberCheckBox.setBounds(10, 100, 180, 20);
+        numberCheckBox.setSelected(true);
         characterPanel.add(numberCheckBox);
         JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
         symbolCheckBox.setBounds(10, 130, 220, 20);
+        symbolCheckBox.setSelected(true);
         characterPanel.add(symbolCheckBox);
     }
 
@@ -391,7 +416,6 @@ public class gui {
                 JButton selectList = new JButton("Use this list");
                 selectList.setMargin(new Insets(0, 0, 0, 0));
                 selectList.setBounds(10, 70, 75, 20);
-                selectList.setBackground(new Color(255,179,71));
                 wordlistPanel.add(selectList);
                 selectList.addActionListener(new ActionListener() {
                     @Override
@@ -457,7 +481,10 @@ public class gui {
         try {
             return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
         } catch (IOException e) {
-            System.out.println("File not found");//TODO make this a popup
+            JDialog dialog = new JDialog(main_file.gui.frame,"ERROR: File not found!",true);
+            dialog.setSize(200,20);
+            dialog.setLocationRelativeTo(main_file.gui.frame);
+            dialog.setVisible(true);
         }
         return "";
     }

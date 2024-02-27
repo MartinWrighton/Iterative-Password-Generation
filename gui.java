@@ -108,7 +108,6 @@ public class gui {
 
     private JPanel createRightPanel(String title,JPanel parent,node newNode){
         //TODO add all different mutation types
-        //TODO a tree with one node cannot be reselected of a different tree has been selected since
         JPanel newRightPanel = new JPanel();//setting up right panel
         parent.add(newRightPanel);
         newRightPanel.setVisible(false);
@@ -187,7 +186,7 @@ public class gui {
             @Override
             public void actionPerformed(ActionEvent e){
                 if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
-                    passwordCheck checker = new passwordCheck(main_file.selected_node.getWord(),progressBar);
+                    passwordCheck checker = new passwordCheck(main_file.selected_node,progressBar);
                     checker.execute();
                 } else {
                     System.out.println("ERROR: no node or no wordlist selected");//TODO make this a popup
@@ -195,11 +194,11 @@ public class gui {
             }});
         
         //TODO set font size smaller and implement scroll pane
+        //TODO add a clear/reset button
         JTextArea resultBox = new JTextArea();
         resultBox.setBounds(10, 375, 350, 150);
         newRightPanel.add(resultBox);
         resultBox.setEditable(false);
-        System.out.println("AA");
         for (String i : newNode.getIssues()){
             System.out.println(i);
             resultBox.append(i);
@@ -208,8 +207,6 @@ public class gui {
     }
 
     private void createChildNode(ActionEvent e){
-        //TODO all non-root nodes are using the same rightpanel??
-        //TODO and their issues are not displaying
         if(main_file.selected_node != null){
             //newly created node stored here
             node newNode = new node(null, null, null, null, null);
@@ -249,13 +246,22 @@ public class gui {
             }
 
             if (newNode.getWord() != null){
+                
                 newNode.setRightPanel(createRightPanel(newNode.getWord(),(JPanel) main_file.gui.tabs.getSelectedComponent(),newNode));
             }
         }
         
     }
 
-    
+    public static void updateIssues(node newNode){
+        JTextArea area = (JTextArea) newNode.getRightPanel().getComponentAt(10,390);
+        area.setText("");
+        for (String i : newNode.getIssues()){
+            System.out.println(i);
+            area.append(i);
+        }
+
+    }
 
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
          node newNode = new node(rootPassword, null,null,null,null);
@@ -273,11 +279,14 @@ public class gui {
                  if (clicked_node == null) {
                      return;
                  }
-                 
+
+                 if (main_file.selected_node != null){
+                    main_file.selected_node.getRightPanel().setVisible(false);
+                 }
                  main_file.selected_node = (node) clicked_node.getUserObject();//save clicked node (as a node object)
-                 main_file.gui.tabs.getSelectedComponent().getComponentAt(405,10).setVisible(false);
                  ((node) clicked_node.getUserObject()).getRightPanel().setVisible(true);
-                 //TODO when a lower nodes spinner is changed, and you switch to a higher node, that higher node temporarily shows the wrong spinner
+
+                 tree.clearSelection();//lets the node be clicked again
              }
  
          });

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
@@ -161,6 +160,10 @@ public class node {
 
     public void setRightPanel(JPanel rightpanel){
         this.rightPanel = rightpanel;
+    }
+
+    public void setIssues(ArrayList<String> newList){
+        this.issues = newList;
     }
     
 }

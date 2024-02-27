@@ -1,25 +1,25 @@
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 public class passwordCheck extends SwingWorker<String,Integer> {
     private String pattern;
     private JProgressBar progressBar;
-    public  passwordCheck(String pattern,JProgressBar progressBar){
-        this.pattern = pattern;
+    private node node;
+    public  passwordCheck(node node,JProgressBar progressBar){
+        this.pattern = node.getWord();
+        this.node = node;
         this.progressBar = progressBar;
-        //TODO uses the root nodes title to display results, even if we are testing a child
     }
 
     @Override
     protected String doInBackground() throws Exception {
         //this is the background process, where the password check can be done
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
-        //TODO panels are still using the same progressbar
         //TODO lock the test button until test is finished
         int bestMatch = 999;
         int newMatch;
@@ -45,20 +45,17 @@ public class passwordCheck extends SwingWorker<String,Integer> {
 
     protected void done(){
         //this is where the gui gets updated at the end
-        JLabel current_page_title = (JLabel) main_file.gui.getTabs().getSelectedComponent().getComponentAt(405,10).getComponentAt(10,0);
-        try {
-            
-            current_page_title.setText(get());
 
-            
+        ArrayList<String> issues = this.node.getIssues();
+        try {
+            issues.add("TEST: "+main_file.selected_wordlist_name+" was within "+get()+" characters of this password");
         } catch (InterruptedException e) {
-            // Auto-generated catch block
             e.printStackTrace();
         } catch (ExecutionException e) {
-            // Auto-generated catch block
             e.printStackTrace();
         }
-        this.progressBar.setValue(100);
+        node.setIssues(issues);
+        gui.updateIssues(this.node);
     }
 
 

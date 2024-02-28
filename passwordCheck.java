@@ -57,9 +57,9 @@ public class passwordCheck extends SwingWorker<String,Integer> {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        node.getRightPanel().getComponentAt(10, 300).setEnabled(true);
+        node.getRightPanel().getGoTest().setEnabled(true);
         node.setIssues(issues);
-        gui.updateIssues(this.node);
+        this.node.getRightPanel().updateIssues();
     }
 
 

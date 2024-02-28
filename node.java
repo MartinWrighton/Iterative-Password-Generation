@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -14,9 +13,10 @@ public class node {
     private ArrayList<node> children;
     private DefaultMutableTreeNode treeNode;
     private DefaultTreeModel treeModel;
-    private JPanel rightPanel;
+    private rightPanel rightPanel;
     private ArrayList<String> issues;
-    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,JPanel rightPanel){
+
+    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,rightPanel rightPanel){
         this.word = word;
         this.children = new ArrayList<node>();
         this.parent = parent;
@@ -125,7 +125,7 @@ public class node {
         return this.treeModel;
     }
 
-    public JPanel getRightPanel(){
+    public rightPanel getRightPanel(){
         return this.rightPanel;
     }
 
@@ -158,7 +158,7 @@ public class node {
         this.treeModel = treeModel;
     }
 
-    public void setRightPanel(JPanel rightpanel){
+    public void setRightPanel(rightPanel rightpanel){
         this.rightPanel = rightpanel;
     }
 

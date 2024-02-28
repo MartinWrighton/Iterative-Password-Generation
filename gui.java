@@ -3,19 +3,12 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,6 +33,8 @@ public class gui {
     private JTabbedPane tabs;
     private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
+
+    protected settings settings;
     public gui() {
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
@@ -51,7 +46,8 @@ public class gui {
         this.frame.setVisible(true); // making the frame visible
         createNewFileTab();
         
-        createSettingsTab();
+        settings = new settings(tabs);
+        
 
     }
 
@@ -188,7 +184,7 @@ public class gui {
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
+                if (main_file.selected_node != null && settings.getSelectedWordlistString() != null){
                     passwordCheck checker = new passwordCheck(main_file.selected_node,progressBar);
                     checker.execute();
                     goTest.setEnabled(false);
@@ -318,178 +314,7 @@ public class gui {
     }
 
 
-    private void createSettingsTab(){
-        JPanel settings = new JPanel();
-        settings.setBackground(new Color(200,200,255));
-        settings.setLayout(null);// let setBounds work
-        this.panels.add(settings);
-        this.tabs.insertTab("Settings", null, settings, "Personalise your experience", 0);
-
-        createCharacterListPanel(settings);
-        
-        createPasswordPolicyPanel(settings);
-
-        createWordlistPanel(settings);
-
-    }
-
-    public void createCharacterListPanel(JPanel settings){
-        //TODO implement character lists
-        JPanel characterPanel = new JPanel();
-        characterPanel.setBounds(10,10,385,255);
-        characterPanel.setLayout(null);
-        settings.add(characterPanel);
-        JLabel allowedCharactersText = new JLabel("Valid Characters:");// character lists
-        allowedCharactersText.setBounds(10,10, 100, 10);
-        characterPanel.add(allowedCharactersText);
-        JCheckBox lowerCaseCheckBox = new JCheckBox("Lower case letters: a-z");//these are all allowed characters by the IBM Business Automation Workflow
-        lowerCaseCheckBox.setBounds(10, 40, 180, 20);
-        lowerCaseCheckBox.setSelected(true);
-        characterPanel.add(lowerCaseCheckBox);
-        JCheckBox upperCaseCheckBox = new JCheckBox("Upper case letters: A-Z");
-        upperCaseCheckBox.setBounds(10, 70, 180, 20);
-        upperCaseCheckBox.setSelected(true);
-        characterPanel.add(upperCaseCheckBox);
-        JCheckBox numberCheckBox = new JCheckBox("Numbers: 0-9");
-        numberCheckBox.setBounds(10, 100, 180, 20);
-        numberCheckBox.setSelected(true);
-        characterPanel.add(numberCheckBox);
-        JCheckBox symbolCheckBox = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
-        symbolCheckBox.setBounds(10, 130, 220, 20);
-        symbolCheckBox.setSelected(true);
-        characterPanel.add(symbolCheckBox);
-    }
-
-    public void createPasswordPolicyPanel(JPanel settings){
-        //TODO more password policy options?
-        JPanel policyPanel = new JPanel();
-        policyPanel.setBounds(10,275,385,255);
-        policyPanel.setLayout(null);
-        settings.add(policyPanel);
-        JLabel policyText = new JLabel("Required Policy:");// policy
-        policyText.setBounds(10, 10, 100, 12);
-        policyPanel.add(policyText);
-        JCheckBox lengthCheckBox = new JCheckBox("At least");//these are all allowed characters by the IBM Business Automation Workflow
-        lengthCheckBox.setBounds(10, 40, 62, 15);
-        policyPanel.add(lengthCheckBox);
-        JSpinner lengthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
-        lengthSpinner.setBounds(73, 40, 35, 15);
-        policyPanel.add(lengthSpinner);
-        JLabel lengthEndLabel = new JLabel("characters");
-        lengthEndLabel.setBounds(110, 40, 180, 15);
-        policyPanel.add(lengthEndLabel);
-        JCheckBox capitalCheckBox = new JCheckBox("Must include a capital letter");//these are all allowed characters by the IBM Business Automation Workflow
-        capitalCheckBox.setBounds(10, 70, 200, 15);
-        policyPanel.add(capitalCheckBox);
-        JCheckBox numeralCheckBox = new JCheckBox("Must include a number");//these are all allowed characters by the IBM Business Automation Workflow
-        numeralCheckBox.setBounds(10, 100, 180, 15);
-        policyPanel.add(numeralCheckBox);
-        JCheckBox specialCheckBox = new JCheckBox("Must include a symbol");//these are all allowed characters by the IBM Business Automation Workflow
-        specialCheckBox.setBounds(10, 130, 180, 15);
-        policyPanel.add(specialCheckBox);
-
-    }
-
-    public void createWordlistPanel(JPanel settings){
-                //TODO add wordlist handling and clean up the logic into functions, might need to redo a lot of it
-                JPanel wordlistPanel = new JPanel();
-                wordlistPanel.setBounds(405,10,385,600);
-                wordlistPanel.setLayout(null);
-                settings.add(wordlistPanel);
-                JLabel wordListsText = new JLabel("Wordlists:");// word lists
-                wordListsText.setBounds(10, 10, 100, 40);
-                wordlistPanel.add(wordListsText);
-                // getting list of wordlists
-                JComboBox<String> wordBox = new JComboBox<String>();
-                try {
-                    File wordFile = new File("../hashcat/CustomWordlists");
-                    for (File i : wordFile.listFiles()) {
-                        wordBox.addItem(i.getName());
-                    }
-                } catch (Exception e) {
-                    System.out.println("Hashcat folder not found");
-                }
-                
-                wordBox.setBounds(10, 40, 150, 20);
-                wordlistPanel.add(wordBox);
-               
-                JButton selectList = new JButton("Use this list");
-                selectList.setMargin(new Insets(0, 0, 0, 0));
-                selectList.setBounds(10, 70, 75, 20);
-                wordlistPanel.add(selectList);
-                selectList.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        selectList.setEnabled(false);
-                        main_file.selected_wordlist_string = wordlistToString((String)wordBox.getSelectedItem());
-                        main_file.selected_wordlist_name = (String)wordBox.getSelectedItem();
-                    }
-                    
-                });
-                wordBox.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (wordBox.getSelectedItem() != main_file.selected_wordlist_name){
-                            selectList.setEnabled(true);
-                        } else {
-                            selectList.setEnabled(false);
-                        }
-                    }
-                });
-                JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
-                createListTitle.setBounds(10, 100, 100, 40);// sets position and size
-                createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
-                wordlistPanel.add(createListTitle);// adds it to page
-                JButton combineList = new JButton("Combine Lists");
-                combineList.setMargin(new Insets(0, 0, 0, 0));
-                combineList.setBounds(10, 130, 90, 20);
-                combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
-                combineList.setBackground(new Color(255,105,97));
-                wordlistPanel.add(combineList);
-                JButton uploadList = new JButton("Upload Custom Lists");
-                uploadList.setMargin(new Insets(0, 0, 0, 0));
-                uploadList.setBounds(10, 160, 130, 20);
-                uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
-                uploadList.setBackground(new Color(255,105,97));
-                wordlistPanel.add(uploadList);
-                JButton personalList = new JButton("Create Personal List");
-                personalList.setMargin(new Insets(0, 0, 0, 0));
-                personalList.setBounds(10, 190, 130, 20);
-                personalList.addActionListener(new ActionListener(){
-                    @Override
-                    public void actionPerformed(ActionEvent e) {//TODO redo list creation
-                        try {
-                            main_file.createPersonalList();
-                        } catch (IOException e1) {
-                            System.out.println("main_file.createPersonalList() failed!!!");
-                            e1.printStackTrace();
-                        }
-                        wordBox.addItem("personalList.txt");
-                        
-        
-                        
-                    }
-                });
-                personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
-                personalList.setBackground(new Color(255,179,71));
-        
-        
-                wordlistPanel.add(personalList);
-    }
-
-    private String wordlistToString(String filename){
-        try {
-            return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
-        } catch (IOException e) {
-            JDialog dialog = new JDialog(main_file.gui.frame,"ERROR: File not found!",true);
-            dialog.setSize(200,20);
-            dialog.setLocationRelativeTo(main_file.gui.frame);
-            dialog.setVisible(true);
-        }
-        return "";
-    }
-
-
+   
     public JFrame getFrame() {
         return frame;
     }

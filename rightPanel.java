@@ -1,5 +1,7 @@
-import java.awt.Color;
+
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,34 +37,74 @@ public class rightPanel extends JPanel{
         //TODO add all different mutation types
         parent.add(this);
         setVisible(false);
-        setBounds(405, 10, 385, 600);
-        setLayout(null);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 10, 10);
+        c.weightx =0.66;
+        c.weighty = 0.1;
+        parent.add(this,c);
+        setLayout(new GridBagLayout());
         
 
         //adding titles to right panel
         JLabel currentNodeLabel = new JLabel(title); 
-        currentNodeLabel.setBounds(10, 0, 300, 20);
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        c.weightx = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
         currentNodeLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-        add(currentNodeLabel);
+        add(currentNodeLabel,c);
 
         //labels
         JLabel rightPanelMutateLabel = new JLabel("Create New Children:");
-        rightPanelMutateLabel.setBounds(10, 15, 200, 40);
-        add(rightPanelMutateLabel);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(rightPanelMutateLabel,c);
 
         JLabel rightPanelTestLabel = new JLabel("Test this Node:");
-        rightPanelTestLabel.setBounds(10, 250, 200, 40);
-        add(rightPanelTestLabel);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 7;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(rightPanelTestLabel,c);
 
         JLabel rightPanelResultsLabel = new JLabel("Results & Issues:");
-        rightPanelResultsLabel.setBounds(10, 350, 200, 40);
-        add(rightPanelResultsLabel);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 12;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(rightPanelResultsLabel,c);
 
-        goMutate = new JButton("Go (test)"); // setting up mutate button
-        goMutate.setBackground(new Color(255,105,97));
-        goMutate.setBounds(200, 200, 150, 20);
+        goMutate = new JButton("Go"); // setting up mutate button
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.LINE_START;
         goMutate.setToolTipText("This is a test button to create test children");
-        add(goMutate);
+        add(goMutate,c);
         goMutate.addActionListener( new ActionListener(){// process for creating a new child
 
             @Override
@@ -72,19 +114,38 @@ public class rightPanel extends JPanel{
 
 
         padNumber = new JRadioButton("Pad Numbers");
-        padNumber.setBounds(10, 80, 150, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
         padNumber.setToolTipText("Create a child by padding the parent with numbers");
         padNumber.setSelected(true);
-        add(padNumber);
+        add(padNumber,c);
+
         homoglyph = new JRadioButton("Homoglyph");
-        homoglyph.setBounds(10, 110, 150, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
         homoglyph.setToolTipText("Create a child by exchanging characters with homoglyphs");
-        add(homoglyph);
+        add(homoglyph,c);
 
         capitalize = new JRadioButton("Capitalize");
-        capitalize.setBounds(10, 140, 150, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
         capitalize.setToolTipText("Create a child by capitalizing random characters");
-        add(capitalize);
+        add(capitalize,c);
 
         ButtonGroup mutateRadioGroup = new ButtonGroup();
         mutateRadioGroup.add(padNumber);
@@ -92,21 +153,49 @@ public class rightPanel extends JPanel{
         mutateRadioGroup.add(capitalize);
 
         JLabel howManyLabel = new JLabel("How many?");
-        howManyLabel.setBounds(200, 150, 200, 20);
-        add(howManyLabel);
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(howManyLabel,c);
 
         
         howMany = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
-        howMany.setBounds(200, 170, 40, 20);
-        add(howMany);
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(howMany,c);
         
         progressBar = new JProgressBar(0,100);
-        progressBar.setBounds(10, 340, 350, 20);
-        add(progressBar);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 11;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        c.weighty = 0.1;
+        c.insets = new Insets(0, 10, 0, 10);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(progressBar,c);
 
         goTest = new JButton("Test");
-        goTest.setBounds(10, 300, 80, 20);
-        add(goTest);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 10;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
+        add(goTest,c);
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
@@ -128,15 +217,30 @@ public class rightPanel extends JPanel{
         for (String i : newNode.getIssues()){
             resultBox.append(i);
         }
+
         JScrollPane scroll = new JScrollPane(resultBox);
-        scroll.setBounds(10, 375, 350, 150);
-        add(scroll);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 13;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        c.weighty = 1;
+        c.weightx = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.anchor = GridBagConstraints.CENTER;
+        add(scroll,c);
 
         JButton clearButton = new JButton("Reset");
         clearButton.setMargin(new Insets(0,0,0,0));
         clearButton.setFont(clearButton.getFont().deriveFont(10f));
-        clearButton.setBounds(310, 360, 35, 15);
-        add(clearButton);
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 12;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_END;
+        add(clearButton,c);
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

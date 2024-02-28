@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -40,7 +41,7 @@ public class settings extends JPanel {
     public settings(JTabbedPane tabs){
 
         setBackground(new Color(200,200,255));
-        setLayout(null);// let setBounds work
+        setLayout(new GridBagLayout());// let setBounds work
 
         tabs.insertTab("Settings", null, this, "Personalise your experience", 0);
 
@@ -53,79 +54,209 @@ public class settings extends JPanel {
 
     
     public void createCharacterListPanel(){
+        
+
         //TODO implement character lists
         JPanel characterPanel = new JPanel();
-        characterPanel.setBounds(10,10,385,255);
-        characterPanel.setLayout(null);
-        add(characterPanel);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 0, 0);
+        c.ipadx = 10;
+        c.ipady = 10;
+        c.weightx = 1;
+        c.weighty = 1;
+        characterPanel.setLayout(new GridBagLayout());
+        add(characterPanel,c);
+
         JLabel allowedCharactersText = new JLabel("Valid Characters:");// character lists
-        allowedCharactersText.setBounds(10,10, 100, 10);
-        characterPanel.add(allowedCharactersText);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        characterPanel.add(allowedCharactersText,c);
+
         canLowercase = new JCheckBox("Lower case letters: a-z");//these are all allowed characters by the IBM Business Automation Workflow
-        canLowercase.setBounds(10, 40, 180, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
         canLowercase.setSelected(true);
-        characterPanel.add(canLowercase);
+        characterPanel.add(canLowercase,c);
+
         canUppercase = new JCheckBox("Upper case letters: A-Z");
-        canUppercase.setBounds(10, 70, 180, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
         canUppercase.setSelected(true);
-        characterPanel.add(canUppercase);
+        characterPanel.add(canUppercase,c);
+
         canNumber = new JCheckBox("Numbers: 0-9");
-        canNumber.setBounds(10, 100, 180, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
         canNumber.setSelected(true);
-        characterPanel.add(canNumber);
+        characterPanel.add(canNumber,c);
+
         canSymbol = new JCheckBox("Symbols: ()-.?[]_`~;:!@#$%^&*+=");
-        canSymbol.setBounds(10, 130, 220, 20);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
         canSymbol.setSelected(true);
-        characterPanel.add(canSymbol);
+        characterPanel.add(canSymbol,c);
     }
 
     public void createPasswordPolicyPanel(){
         //TODO more password policy options?
         JPanel policyPanel = new JPanel();
-        policyPanel.setBounds(10,275,385,255);
-        policyPanel.setLayout(null);
-        add(policyPanel);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.ipadx = 10;
+        c.ipady = 10;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(10, 10, 10, 0);
+        policyPanel.setLayout(new GridBagLayout());
+        add(policyPanel,c);
 
         JLabel policyText = new JLabel("Required Policy:");// policy
-        policyText.setBounds(10, 10, 100, 12);
-        policyPanel.add(policyText);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        policyPanel.add(policyText,c);
 
         needLength = new JCheckBox("At least");//these are all allowed characters by the IBM Business Automation Workflow
-        needLength.setBounds(10, 40, 62, 15);
-        policyPanel.add(needLength);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        policyPanel.add(needLength,c);
 
         targetLength = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
-        targetLength.setBounds(73, 40, 35, 15);
-        policyPanel.add(targetLength);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        //c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        policyPanel.add(targetLength,c);
 
         JLabel lengthEndLabel = new JLabel("characters");
-        lengthEndLabel.setBounds(110, 40, 180, 15);
-        policyPanel.add(lengthEndLabel);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        //c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_END;
+        policyPanel.add(lengthEndLabel,c);
 
         needCapital = new JCheckBox("Must include a capital letter");//these are all allowed characters by the IBM Business Automation Workflow
-        needCapital.setBounds(10, 70, 200, 15);
-        policyPanel.add(needCapital);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        policyPanel.add(needCapital,c);
 
         needNumber = new JCheckBox("Must include a number");//these are all allowed characters by the IBM Business Automation Workflow
-        needNumber.setBounds(10, 100, 180, 15);
-        policyPanel.add(needNumber);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        policyPanel.add(needNumber,c);
 
         needSymbol = new JCheckBox("Must include a symbol");//these are all allowed characters by the IBM Business Automation Workflow
-        needSymbol.setBounds(10, 130, 180, 15);
-        policyPanel.add(needSymbol);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.LINE_START;
+        policyPanel.add(needSymbol,c);
 
     }
 
     public void createWordlistPanel(){
         //TODO add wordlist handling and clean up the logic into functions, might need to redo a lot of it
-        //TODO abilirty to view list (as a popup or just open the file?)
+        //TODO ability to view list (as a popup or just open the file?)
         JPanel wordlistPanel = new JPanel();
-        wordlistPanel.setBounds(405,10,385,600);
-        wordlistPanel.setLayout(null);
-        add(wordlistPanel);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridheight = 2;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.ipadx = 10;
+        c.ipady = 10;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        wordlistPanel.setLayout(new GridBagLayout());
+        add(wordlistPanel,c);
+
         JLabel wordListsText = new JLabel("Wordlists:");// word lists
-        wordListsText.setBounds(10, 10, 100, 40);
-        wordlistPanel.add(wordListsText);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.LINE_START;
+        wordlistPanel.add(wordListsText,c);
 
         // getting list of wordlists
         wordBox = new JComboBox<String>();
@@ -138,13 +269,29 @@ public class settings extends JPanel {
             System.out.println("Hashcat folder not found");
         }
         
-        wordBox.setBounds(10, 40, 150, 20);
-        wordlistPanel.add(wordBox);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.LINE_START;
+        wordlistPanel.add(wordBox,c);
         
         selectList = new JButton("Use this list");
-        selectList.setMargin(new Insets(0, 0, 0, 0));
-        selectList.setBounds(10, 70, 75, 20);
-        wordlistPanel.add(selectList);
+        //selectList.setMargin(new Insets(0, 0, 0, 0));
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.CENTER;
+        wordlistPanel.add(selectList,c);
         selectList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -166,25 +313,49 @@ public class settings extends JPanel {
         });
 
         //TODO get these to work
-        JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
-        createListTitle.setBounds(10, 100, 100, 40);// sets position and size
-        createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
-        wordlistPanel.add(createListTitle);// adds it to page
+       
+
         JButton combineList = new JButton("Combine Lists");
-        combineList.setMargin(new Insets(0, 0, 0, 0));
-        combineList.setBounds(10, 130, 90, 20);
+        //combineList.setMargin(new Insets(0, 0, 0, 0));
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.LINE_START;
         combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
         combineList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(combineList);
+        wordlistPanel.add(combineList,c);
+
         JButton uploadList = new JButton("Upload Custom Lists");
-        uploadList.setMargin(new Insets(0, 0, 0, 0));
-        uploadList.setBounds(10, 160, 130, 20);
+        //uploadList.setMargin(new Insets(0, 0, 0, 0));
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.LINE_START;
         uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
         uploadList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(uploadList);
+        wordlistPanel.add(uploadList,c);
+
         JButton personalList = new JButton("Create Personal List");
-        personalList.setMargin(new Insets(0, 0, 0, 0));
-        personalList.setBounds(10, 190, 130, 20);
+        //personalList.setMargin(new Insets(0, 0, 0, 0));
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 6;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(3, 0, 0, 0);
+        c.anchor = GridBagConstraints.LINE_START;
         personalList.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {//TODO redo list creation
@@ -202,9 +373,7 @@ public class settings extends JPanel {
         });
         personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
         personalList.setBackground(new Color(255,179,71));
-
-
-        wordlistPanel.add(personalList);
+        wordlistPanel.add(personalList,c);
     }
 
     private String wordlistToString(String filename){
@@ -218,6 +387,7 @@ public class settings extends JPanel {
         }
         return "";
     }
+
 
     public boolean canLowercase(){
         return canLowercase.isSelected();

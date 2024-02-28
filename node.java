@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractButton;
-import javax.swing.JSpinner;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -55,12 +53,12 @@ public class node {
     public void policyCheck(){
         //TODO find out how to change the icons for swing trees
         //get policy requirements
-        boolean minCharacters = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,40)).isSelected();
-        boolean needCapital = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,70)).isSelected();
-        boolean needNumber = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,100)).isSelected();
-        boolean needSymbol = ((AbstractButton) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(10,130)).isSelected();
+        boolean minCharacters = main_file.gui.settings.needLength();
+        boolean needCapital = main_file.gui.settings.needCapital();;
+        boolean needNumber = main_file.gui.settings.needNumber();;
+        boolean needSymbol = main_file.gui.settings.needSymbol();
         
-        int minNum = (int) ((JSpinner) main_file.gui.getTabs().getComponentAt(0).getComponentAt(10,275).getComponentAt(73,40)).getValue();
+        int minNum = main_file.gui.settings.targetLength();
 
         //Analysis of passwords
         boolean hasCapital,hasNumber,hasSymbol;

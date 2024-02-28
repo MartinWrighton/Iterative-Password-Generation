@@ -11,7 +11,14 @@ public class main_file {
     public static String selected_wordlist_name;
     public static gui gui;
 
-    
+    public static void main(String[] args) throws IOException {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch(Exception e){
+        
+        }
+        gui = new gui();
+    }
 
 
 

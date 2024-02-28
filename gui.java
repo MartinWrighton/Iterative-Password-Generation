@@ -3,19 +3,12 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,6 +33,8 @@ public class gui {
     private JTabbedPane tabs;
     private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
+
+    private settings settings;
     public gui() {
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
@@ -51,7 +46,8 @@ public class gui {
         this.frame.setVisible(true); // making the frame visible
         createNewFileTab();
         
-        createSettingsTab();
+        settings = new settings();
+        this.tabs.add(settings);
 
     }
 
@@ -318,13 +314,7 @@ public class gui {
     }
 
 
-    private void createSettingsTab(){
-        JPanel settings = new JPanel();
-        
-
-    }
-
-
+   
     public JFrame getFrame() {
         return frame;
     }

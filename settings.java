@@ -33,6 +33,9 @@ public class settings extends JPanel {
     private JComboBox<String> wordBox;
     private JButton selectList;
 
+    private String selectedWordlistName;
+    private String selectedWordlistString;
+
     public settings(){
 
         setBackground(new Color(200,200,255));
@@ -145,21 +148,23 @@ public class settings extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectList.setEnabled(false);
-                main_file.selected_wordlist_string = wordlistToString((String)wordBox.getSelectedItem());
-                main_file.selected_wordlist_name = (String)wordBox.getSelectedItem();
+                selectedWordlistString = wordlistToString((String)wordBox.getSelectedItem());
+                selectedWordlistName = (String)wordBox.getSelectedItem();
             }
             
         });
         wordBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (wordBox.getSelectedItem() != main_file.selected_wordlist_name){
+                if (wordBox.getSelectedItem() != selectedWordlistName){
                     selectList.setEnabled(true);
                 } else {
                     selectList.setEnabled(false);
                 }
             }
         });
+
+        //TODO get these to work
         JLabel createListTitle = new JLabel("Create new Lists:");// subtitle
         createListTitle.setBounds(10, 100, 100, 40);// sets position and size
         createListTitle.setBorder(BorderFactory.createEmptyBorder());// removes border
@@ -205,9 +210,9 @@ public class settings extends JPanel {
         try {
             return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
         } catch (IOException e) {
-            JDialog dialog = new JDialog(main_file.gui.frame,"ERROR: File not found!",true);
+            JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: File not found!",true);
             dialog.setSize(200,20);
-            dialog.setLocationRelativeTo(main_file.gui.frame);
+            dialog.setLocationRelativeTo(main_file.gui.getFrame());
             dialog.setVisible(true);
         }
         return "";

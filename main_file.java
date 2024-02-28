@@ -11,14 +11,7 @@ public class main_file {
     public static String selected_wordlist_name;
     public static gui gui;
 
-    public static void main(String[] args) throws IOException {
-        try {//TODO do we want windows or java L&F
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch(Exception e){
-        
-        }
-        gui = new gui();
-    }
+    
 
 
 

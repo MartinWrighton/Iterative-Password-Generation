@@ -1,4 +1,7 @@
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,9 +29,17 @@ public class gui {
         this.tabs = new JTabbedPane();// tabbed pane
         this.panels = new ArrayList<JPanel>();
         this.trees = new ArrayList<JTree>();
-        this.frame.add(tabs);
-        this.frame.setSize(800, 600); // 400 width and 500 height
-        this.frame.setLayout(null); // using no layout managers
+        this.frame.setLayout(new GridBagLayout());
+        this.frame.setMinimumSize(new Dimension(500,400));
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        this.frame.add(tabs,c);
+        
+
         this.frame.setVisible(true); // making the frame visible
         createNewFileTab();
         

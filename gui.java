@@ -16,18 +16,17 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import java.awt.Insets;
 
 public class gui {
     private JFrame frame;
     private JTabbedPane tabs;
-    private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
-
     protected settings settings;
+
     public gui() {
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
-        this.panels = new ArrayList<JPanel>();
         this.trees = new ArrayList<JTree>();
         this.frame.setLayout(new GridBagLayout());
         this.frame.setMinimumSize(new Dimension(500,400));
@@ -50,8 +49,8 @@ public class gui {
 
     private void createNewFileTab(){
         //TODO fill out this page
-        JPanel panel1 = new JPanel();// new page panel
-        this.panels.add(panel1);
+        JPanel panel1 = new JPanel(new GridBagLayout());// new page panel
+        
 
         JTextField panel1_text1 = new JTextField(20);
         JButton panel1_button1 = new JButton("Create new File");// create tab button
@@ -61,11 +60,29 @@ public class gui {
             public void actionPerformed(ActionEvent e) {
                 createNewWorkingFileTab(panel1_text1.getText());
             }});
-        panel1.add(panel1_button1);
-        panel1.add(panel1_text1);
+        
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 0;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        panel1.add(panel1_button1,c);
+
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 0;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        panel1.add(panel1_text1,c);
 
         this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);
-        this.tabs.setBounds(0, 0, 800, 600);
 
 
        
@@ -77,8 +94,7 @@ public class gui {
         //create new panel
         JPanel newpanel = new JPanel();
         newpanel.setBackground(new Color(200,200,255));
-        newpanel.setLayout(null);
-        panels.add(newpanel);
+        newpanel.setLayout(new GridBagLayout());
         tabs.insertTab(rootPassword, null, newpanel, null, tabs.getSelectedIndex());
 
         
@@ -90,14 +106,31 @@ public class gui {
     private void createLeftPanel(JPanel newpanel,String rootPassword){
         //create left panel
         JPanel newLeftPanel = new JPanel();
-        newpanel.add(newLeftPanel);
-        newLeftPanel.setBounds(10, 10, 385, 680);
-        newLeftPanel.setLayout(null);
-
+        
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 10, 0);
+        c.ipadx = 10;
+        c.ipady = 10;
+        c.weightx = 1;
+        c.weighty = 1;
+        newLeftPanel.setLayout(new GridBagLayout());
+        newpanel.add(newLeftPanel,c);
         //create tree and place in left panel
         JTree tree = createNewTree(rootPassword,newpanel);
-        tree.setBounds(10, 10, 375, 670);
-        newLeftPanel.add(tree);
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        newLeftPanel.add(tree,c);
         trees.add(tree);
     }
 
@@ -105,6 +138,7 @@ public class gui {
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
         node newNode = new node(rootPassword, null,null,null,null);
         newNode.setRightPanel(new rightPanel(rootPassword,parentPanel,newNode));
+        newNode.getRightPanel().setVisible(true);
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our node class
         newNode.setTreeNode(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
@@ -148,14 +182,6 @@ public class gui {
 
     public void setTabs(JTabbedPane tabs) {
         this.tabs = tabs;
-    }
-
-    public ArrayList<JPanel> getPanels() {
-        return panels;
-    }
-
-    public void setPanels(ArrayList<JPanel> panels) {
-        this.panels = panels;
     }
 
 }

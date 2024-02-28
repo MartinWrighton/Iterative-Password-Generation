@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -79,6 +78,8 @@ public class settings extends JPanel {
         c.gridy = 1;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         characterPanel.add(allowedCharactersText,c);
 
@@ -88,6 +89,8 @@ public class settings extends JPanel {
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         canLowercase.setSelected(true);
         characterPanel.add(canLowercase,c);
@@ -98,6 +101,8 @@ public class settings extends JPanel {
         c.gridy = 3;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         canUppercase.setSelected(true);
         characterPanel.add(canUppercase,c);
@@ -108,6 +113,8 @@ public class settings extends JPanel {
         c.gridy = 4;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         canNumber.setSelected(true);
         characterPanel.add(canNumber,c);
@@ -118,6 +125,8 @@ public class settings extends JPanel {
         c.gridy = 5;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         canSymbol.setSelected(true);
         characterPanel.add(canSymbol,c);
@@ -146,6 +155,8 @@ public class settings extends JPanel {
         c.gridy = 1;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(policyText,c);
 
@@ -155,6 +166,8 @@ public class settings extends JPanel {
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(needLength,c);
 
@@ -164,6 +177,8 @@ public class settings extends JPanel {
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
+        //c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
         policyPanel.add(targetLength,c);
 
@@ -173,6 +188,8 @@ public class settings extends JPanel {
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
+        //c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_END;
         policyPanel.add(lengthEndLabel,c);
 
@@ -182,6 +199,8 @@ public class settings extends JPanel {
         c.gridy = 3;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(needCapital,c);
 
@@ -191,6 +210,8 @@ public class settings extends JPanel {
         c.gridy = 4;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(needNumber,c);
 
@@ -200,6 +221,8 @@ public class settings extends JPanel {
         c.gridy = 5;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(needSymbol,c);
 
@@ -229,6 +252,8 @@ public class settings extends JPanel {
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
         wordlistPanel.add(wordListsText,c);
@@ -249,8 +274,10 @@ public class settings extends JPanel {
         c.gridy = 3;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.LINE_START;
         wordlistPanel.add(wordBox,c);
         
         selectList = new JButton("Use this list");
@@ -260,8 +287,10 @@ public class settings extends JPanel {
         c.gridy = 3;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
-        c.anchor = GridBagConstraints.LINE_END;
+        c.anchor = GridBagConstraints.CENTER;
         wordlistPanel.add(selectList,c);
         selectList.addActionListener(new ActionListener() {
             @Override
@@ -293,6 +322,8 @@ public class settings extends JPanel {
         c.gridy = 4;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
         combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
@@ -306,6 +337,8 @@ public class settings extends JPanel {
         c.gridy = 5;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
         uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
@@ -319,6 +352,8 @@ public class settings extends JPanel {
         c.gridy = 6;
         c.gridheight = 1;
         c.gridwidth = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
         personalList.addActionListener(new ActionListener(){

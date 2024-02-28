@@ -34,7 +34,7 @@ public class gui {
     private ArrayList<JPanel> panels;
     private ArrayList<JTree> trees;
 
-    private settings settings;
+    protected settings settings;
     public gui() {
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
@@ -46,8 +46,8 @@ public class gui {
         this.frame.setVisible(true); // making the frame visible
         createNewFileTab();
         
-        settings = new settings();
-        this.tabs.add(settings);
+        settings = new settings(tabs);
+        
 
     }
 
@@ -184,7 +184,7 @@ public class gui {
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if (main_file.selected_node != null && main_file.selected_wordlist_string != null){
+                if (main_file.selected_node != null && settings.getSelectedWordlistString() != null){
                     passwordCheck checker = new passwordCheck(main_file.selected_node,progressBar);
                     checker.execute();
                     goTest.setEnabled(false);

@@ -22,13 +22,13 @@ public class passwordCheck extends SwingWorker<String,Integer> {
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
         int bestMatch = 999;
         int newMatch;
-        for (int i = 1; i <= (main_file.selected_wordlist_string.length()/3000000)+1 ; i++){
+        for (int i = 1; i <= (main_file.gui.settings.getSelectedWordlistString().length()/3000000)+1 ; i++){
             
             
             try {
-                newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1),3000000*i));
+                newMatch = approxStringMatch(this.pattern,main_file.gui.settings.getSelectedWordlistString().substring(3000000*(i-1),3000000*i));
             } catch (Exception e) {
-                newMatch = approxStringMatch(this.pattern,main_file.selected_wordlist_string.substring(3000000*(i-1)));
+                newMatch = approxStringMatch(this.pattern,main_file.gui.settings.getSelectedWordlistString().substring(3000000*(i-1)));
             }
             if (newMatch == 0){// early break on perfect match
                 bestMatch = 0;
@@ -37,22 +37,22 @@ public class passwordCheck extends SwingWorker<String,Integer> {
                 bestMatch = newMatch;
             }
 
-            publish((i*100) / ((main_file.selected_wordlist_string.length()/3000000)+1));
+            publish((i*100) / ((main_file.gui.settings.getSelectedWordlistString().length()/3000000)+1));
         }
         return Integer.toString(bestMatch);
     }
 
     protected void done(){
-        //this is where the gui gets updated at the end
+        //this is where the gui.settings gets updated at the end
         String result;
         ArrayList<String> issues = this.node.getIssues();
         try {
             result = get();
             //TODO actually calculate how bad this is and display it somehow
             if (result.equals("0")){
-                issues.add("TEST: "+main_file.selected_wordlist_name+" cracked this password\n");
+                issues.add("TEST: "+main_file.gui.settings.getSelectedWordlistName()+" cracked this password\n");
             } else {
-                issues.add("TEST: "+main_file.selected_wordlist_name+" was within "+result+" character(s) of this password\n");
+                issues.add("TEST: "+main_file.gui.settings.getSelectedWordlistName()+" was within "+result+" character(s) of this password\n");
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

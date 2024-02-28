@@ -15,6 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 
 public class settings extends JPanel {
@@ -36,12 +37,12 @@ public class settings extends JPanel {
     private String selectedWordlistName;
     private String selectedWordlistString;
 
-    public settings(){
+    public settings(JTabbedPane tabs){
 
         setBackground(new Color(200,200,255));
         setLayout(null);// let setBounds work
-        main_file.gui.getPanels().add(this);
-        main_file.gui.getTabs().insertTab("Settings", null, this, "Personalise your experience", 0);
+
+        tabs.insertTab("Settings", null, this, "Personalise your experience", 0);
 
         createCharacterListPanel();
         
@@ -218,4 +219,44 @@ public class settings extends JPanel {
         return "";
     }
 
+    public boolean canLowercase(){
+        return canLowercase.isSelected();
+    }
+    public boolean canUppercase(){
+        return canUppercase.isSelected();
+    }
+    public boolean canNumber(){
+        return canNumber.isSelected();
+    }
+    public boolean canSymbol(){
+        return canSymbol.isSelected();
+    }
+
+    public boolean needLength(){
+        return needLength.isSelected();
+    }
+    public boolean needCapital(){
+        return needCapital.isSelected();
+    }
+    public boolean needNumber(){
+        return needNumber.isSelected();
+    }
+    public boolean needSymbol(){
+        return needSymbol.isSelected();
+    }
+
+    public int targetLength(){
+        return (int) targetLength.getValue();
+    }
+
+    public String getSelectedWordlistName(){
+        return selectedWordlistName;
+    }
+
+    public String getSelectedWordlistString(){
+        return selectedWordlistString;
+    }
+    
+
+    
 }

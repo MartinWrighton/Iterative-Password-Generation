@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.UIManager;
 
-public class main_file {
-    public static node selected_node;
-    public static gui gui;
+public class Main {
+    public static Node selected_node;
+    public static Gui Gui;
 
     public static void main(String[] args) throws IOException {
         try {
@@ -14,7 +14,7 @@ public class main_file {
         } catch(Exception e){
         
         }
-        gui = new gui();
+        Gui = new Gui();
     }
 
 

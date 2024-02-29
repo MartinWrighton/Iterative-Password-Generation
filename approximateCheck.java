@@ -6,15 +6,15 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-public class approximateCheck extends SwingWorker<String,Integer> {
+public class ApproximateCheck extends SwingWorker<String,Integer> {
     //TODO make a new longest substring test?
     //TODO make hashing time test?
     private String pattern;
     private JProgressBar progressBar;
-    private node node;
-    public  approximateCheck(node node,JProgressBar progressBar){
-        this.pattern = node.getWord();
-        this.node = node;
+    private Node Node;
+    public  ApproximateCheck(Node Node,JProgressBar progressBar){
+        this.pattern = Node.getWord();
+        this.Node = Node;
         this.progressBar = progressBar;
     }
 
@@ -24,13 +24,13 @@ public class approximateCheck extends SwingWorker<String,Integer> {
         // The matrix is filled with bytes, this means that we cannot use passwords longer than 126 characters. I doubt that will be an issue
         int bestMatch = 999;
         int newMatch;
-        for (int i = 1; i <= (main_file.gui.settings.getSelectedWordlistString().length()/3000000)+1 ; i++){
+        for (int i = 1; i <= (Main.Gui.Settings.getSelectedWordlistString().length()/3000000)+1 ; i++){
             
             
             try {
-                newMatch = approxStringMatch(this.pattern,main_file.gui.settings.getSelectedWordlistString().substring(3000000*(i-1),3000000*i));
+                newMatch = approxStringMatch(this.pattern,Main.Gui.Settings.getSelectedWordlistString().substring(3000000*(i-1),3000000*i));
             } catch (Exception e) {
-                newMatch = approxStringMatch(this.pattern,main_file.gui.settings.getSelectedWordlistString().substring(3000000*(i-1)));
+                newMatch = approxStringMatch(this.pattern,Main.Gui.Settings.getSelectedWordlistString().substring(3000000*(i-1)));
             }
             if (newMatch == 0){// early break on perfect match
                 bestMatch = 0;
@@ -39,29 +39,29 @@ public class approximateCheck extends SwingWorker<String,Integer> {
                 bestMatch = newMatch;
             }
 
-            publish((i*100) / ((main_file.gui.settings.getSelectedWordlistString().length()/3000000)+1));
+            publish((i*100) / ((Main.Gui.Settings.getSelectedWordlistString().length()/3000000)+1));
         }
         return Integer.toString(bestMatch);
     }
 
     protected void done(){
-        //this is where the gui.settings gets updated at the end
+        //this is where the Gui.Settings gets updated at the end
         String result;
-        ArrayList<String> issues = this.node.getIssues();
+        ArrayList<String> issues = this.Node.getIssues();
         try {
             result = get();
             //TODO actually calculate how bad this is and display it somehow
             if (result.equals("0")){
-                issues.add("TEST: "+main_file.gui.settings.getSelectedWordlistName()+" cracked this password\n");
+                issues.add("TEST: "+Main.Gui.Settings.getSelectedWordlistName()+" cracked this password\n");
             } else {
-                issues.add("TEST: "+main_file.gui.settings.getSelectedWordlistName()+" was within "+result+" character(s) of this password\n");
+                issues.add("TEST: "+Main.Gui.Settings.getSelectedWordlistName()+" was within "+result+" character(s) of this password\n");
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        node.getRightPanel().getGoTest().setEnabled(true);
-        node.setIssues(issues);
-        this.node.getRightPanel().updateIssues();
+        Node.getRightPanel().getGoTest().setEnabled(true);
+        Node.setIssues(issues);
+        this.Node.getRightPanel().updateIssues();
     }
 
 

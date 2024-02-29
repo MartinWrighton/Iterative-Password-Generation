@@ -4,23 +4,23 @@ import java.util.regex.Pattern;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-public class node {
+public class Node {
     private String word;
     private int strength;
-    private node parent;
-    private ArrayList<node> children;
+    private Node parent;
+    private ArrayList<Node> children;
     private DefaultMutableTreeNode treeNode;
     private DefaultTreeModel treeModel;
-    private rightPanel rightPanel;
+    private RightPanel RightPanel;
     private ArrayList<String> issues;
 
-    public node(String word,node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,rightPanel rightPanel){
+    public Node(String word,Node parent, DefaultMutableTreeNode treeNode, DefaultTreeModel treeModel,RightPanel RightPanel){
         this.word = word;
-        this.children = new ArrayList<node>();
+        this.children = new ArrayList<Node>();
         this.parent = parent;
         this.treeNode = treeNode;
         this.treeModel = treeModel;
-        this.rightPanel = rightPanel;
+        this.RightPanel = RightPanel;
         this.issues = new ArrayList<String>();
         if (this.word != null){
             policyCheck();
@@ -34,17 +34,17 @@ public class node {
         return this.word;
     }
 
-    public node addChild(String name){
+    public Node addChild(String name){
         //System.out.print("addChild ");
-        node newNode = new node(name, this, null,this.treeModel,null);//create the new node
+        Node newNode = new Node(name, this, null,this.treeModel,null);//create the new Node
         //System.out.print("newNode ");
-        DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);// create the new treeNode holding the node
+        DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);// create the new treeNode holding the Node
         //System.out.print("newTreeNode ");
-        newNode.setTreeNode(newTreeNode);// tell the node who its treeNode is
+        newNode.setTreeNode(newTreeNode);// tell the Node who its treeNode is
         //System.out.print("setTreeNode ");
-        this.children.add(newNode);// adds new node to is nodes children
+        this.children.add(newNode);// adds new Node to is nodes children
         //System.out.print("addNode ");
-        this.treeNode.add(newTreeNode);// adds treeNode to the tree under this node
+        this.treeNode.add(newTreeNode);// adds treeNode to the tree under this Node
         //System.out.println("addTreeNode");
         this.treeModel.reload();
         return newNode;
@@ -53,12 +53,12 @@ public class node {
     public void policyCheck(){
         //TODO find out how to change the icons for swing trees
         //get policy requirements
-        boolean minCharacters = main_file.gui.settings.needLength();
-        boolean needCapital = main_file.gui.settings.needCapital();;
-        boolean needNumber = main_file.gui.settings.needNumber();;
-        boolean needSymbol = main_file.gui.settings.needSymbol();
+        boolean minCharacters = Main.Gui.Settings.needLength();
+        boolean needCapital = Main.Gui.Settings.needCapital();;
+        boolean needNumber = Main.Gui.Settings.needNumber();;
+        boolean needSymbol = Main.Gui.Settings.needSymbol();
         
-        int minNum = main_file.gui.settings.targetLength();
+        int minNum = Main.Gui.Settings.targetLength();
 
         //Analysis of passwords
         boolean hasCapital,hasNumber,hasSymbol;
@@ -107,11 +107,11 @@ public class node {
         return this.strength;
     }
 
-    public node getParent(){
+    public Node getParent(){
         return this.parent;
     }
 
-    public ArrayList<node> getChildren(){
+    public ArrayList<Node> getChildren(){
         return this.children;
     }
 
@@ -123,8 +123,8 @@ public class node {
         return this.treeModel;
     }
 
-    public rightPanel getRightPanel(){
-        return this.rightPanel;
+    public RightPanel getRightPanel(){
+        return this.RightPanel;
     }
 
     public ArrayList<String> getIssues(){
@@ -140,11 +140,11 @@ public class node {
         this.strength = strength;
     }
 
-    public void setParent(node parent) {
+    public void setParent(Node parent) {
         this.parent = parent;
     }
 
-    public void setChildren(ArrayList<node> children) {
+    public void setChildren(ArrayList<Node> children) {
         this.children = children;
     }
 
@@ -156,8 +156,8 @@ public class node {
         this.treeModel = treeModel;
     }
 
-    public void setRightPanel(rightPanel rightpanel){
-        this.rightPanel = rightpanel;
+    public void setRightPanel(RightPanel RightPanel){
+        this.RightPanel = RightPanel;
     }
 
     public void setIssues(ArrayList<String> newList){

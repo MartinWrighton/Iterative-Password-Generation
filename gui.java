@@ -18,13 +18,13 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.Insets;
 
-public class gui {
+public class Gui {
     private JFrame frame;
     private JTabbedPane tabs;
     private ArrayList<JTree> trees;
-    protected settings settings;
+    protected Settings Settings;
 
-    public gui() {
+    public Gui() {
         //TODO suggestions, if characters are missing, its too short or long substrings are matched
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
@@ -43,7 +43,7 @@ public class gui {
         this.frame.setVisible(true); // making the frame visible
         createNewFileTab();
         
-        settings = new settings(tabs);
+        Settings = new Settings(tabs);
         
 
     }
@@ -138,30 +138,30 @@ public class gui {
 
     
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
-        node newNode = new node(rootPassword, null,null,null,null);
-        newNode.setRightPanel(new rightPanel(rootPassword,parentPanel,newNode));
+        Node newNode = new Node(rootPassword, null,null,null,null);
+        newNode.setRightPanel(new RightPanel(rootPassword,parentPanel,newNode));
         newNode.getRightPanel().setVisible(true);
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our node class
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our Node class
         newNode.setTreeNode(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         newNode.setTreeModel(treeModel);
         JTree tree = new JTree(treeModel);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree.addTreeSelectionListener(new TreeSelectionListener() {//when node is clicked
+        tree.addTreeSelectionListener(new TreeSelectionListener() {//when Node is clicked
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode clicked_node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();//get the clicked node
+                DefaultMutableTreeNode clicked_node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();//get the clicked Node
                 if (clicked_node == null) {
                     return;
                 }
 
-                if (main_file.selected_node != null){
-                   main_file.selected_node.getRightPanel().setVisible(false);
+                if (Main.selected_node != null){
+                   Main.selected_node.getRightPanel().setVisible(false);
                 }
-                main_file.selected_node = (node) clicked_node.getUserObject();//save clicked node (as a node object)
-                ((node) clicked_node.getUserObject()).getRightPanel().setVisible(true);
+                Main.selected_node = (Node) clicked_node.getUserObject();//save clicked Node (as a Node object)
+                ((Node) clicked_node.getUserObject()).getRightPanel().setVisible(true);
 
-                tree.clearSelection();//lets the node be clicked again
+                tree.clearSelection();//lets the Node be clicked again
             }
 
         });

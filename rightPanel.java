@@ -23,8 +23,8 @@ import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 
 
-public class rightPanel extends JPanel{
-    private node newNode;
+public class RightPanel extends JPanel{
+    private Node newNode;
 
     private JRadioButton padNumber;
     private JRadioButton homoglyph;
@@ -39,7 +39,7 @@ public class rightPanel extends JPanel{
     private JProgressBar progressBar;
     private JTextArea resultBox;
     
-    public rightPanel(String title,JPanel parent,node newNode){
+    public RightPanel(String title,JPanel parent,Node newNode){
         this.newNode = newNode;
 
         parent.add(this);
@@ -244,14 +244,14 @@ public class rightPanel extends JPanel{
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if (main_file.selected_node != null && main_file.gui.settings.getSelectedWordlistString() != null){
-                    approximateCheck checker = new approximateCheck(main_file.selected_node,progressBar);
+                if (Main.selected_node != null && Main.Gui.Settings.getSelectedWordlistString() != null){
+                    ApproximateCheck checker = new ApproximateCheck(Main.selected_node,progressBar);
                     checker.execute();
                     goTest.setEnabled(false);
                 } else {
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: No wordlist selected!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: No wordlist selected!",true);
                     dialog.setSize(230,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
             }});
@@ -299,9 +299,9 @@ public class rightPanel extends JPanel{
     }
 
     private void createChildNode(ActionEvent e){
-        if(main_file.selected_node != null){
-            //newly created node stored here
-            node newNode = new node(null, null, null, null, null);
+        if(Main.selected_node != null){
+            //newly created Node stored here
+            Node newNode = new Node(null, null, null, null, null);
             //we will need a randomizer
             Random random = new Random();
 
@@ -310,24 +310,24 @@ public class rightPanel extends JPanel{
             //radio button is a child of parent
             if (padNumber.isSelected()){
                 //pad numbers
-                if (main_file.gui.settings.canNumber()){
+                if (Main.Gui.Settings.canNumber()){
                     String frontPad = "";
                     String backPad = "";
                     for (int i = 0 ; i < howManyNum ; i++){
                         frontPad = frontPad +(Integer.toString(random.nextInt(10)));
                         backPad = backPad +(Integer.toString(random.nextInt(10)));
                     }
-                    newNode = this.newNode.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                    newNode = this.newNode.addChild(frontPad+Main.selected_node.getWord()+backPad);
                 } else {//dialogue box
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow numbers!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"POLICY: Your policy does not allow numbers!",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
             } else if (homoglyph.isSelected()){
                 //homoglyph
                 Dictionary<String,String> glyphs = new Hashtable<>();
-                if (main_file.gui.settings.canNumber()) {
+                if (Main.Gui.Settings.canNumber()) {
                     glyphs.put("i", "1");
                     glyphs.put("t", "7");
                     glyphs.put("E", "3");
@@ -337,7 +337,7 @@ public class rightPanel extends JPanel{
                     glyphs.put("S","5");
                     glyphs.put("T","7");
                 }
-                if (main_file.gui.settings.canSymbol()){
+                if (Main.Gui.Settings.canSymbol()){
                     glyphs.put("a","@");
                     glyphs.put("J", "!");
                     glyphs.put("l","[");
@@ -361,24 +361,24 @@ public class rightPanel extends JPanel{
                     }
                 }
                 if (glyphs.isEmpty()) {
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow numbers or symbols!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"POLICY: Your policy does not allow numbers or symbols!",true);
                     dialog.setSize(400,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
                 if (pass >= 1){
                     newNode = this.newNode.addChild(String.join("",charList));
                 } else {
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: Not enough homoglyphs found",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: Not enough homoglyphs found",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
 
             } else if (capitalize.isSelected()){
                 //capitalize
                 //find a letter and replace it with the capital version
-                if (main_file.gui.settings.canUppercase()){
+                if (Main.Gui.Settings.canUppercase()){
                     String[] charList = this.newNode.getWord().split("");
                     int pass = 0;
                     int fail = 0;
@@ -393,16 +393,16 @@ public class rightPanel extends JPanel{
                     }
                     newNode = this.newNode.addChild(String.join("",charList));
                 } else {
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow uppercase!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"POLICY: Your policy does not allow uppercase!",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
 
             } else if (padSymbol.isSelected()) {
                 //pad symbol
                 //pad numbers
-                if (main_file.gui.settings.canSymbol()){
+                if (Main.Gui.Settings.canSymbol()){
                     String frontPad = "";
                     String backPad = "";
                     String[] symbols = "()-.?[]_`~;:!@#$%^&*+=".split("");
@@ -410,26 +410,26 @@ public class rightPanel extends JPanel{
                         frontPad = frontPad +(symbols[random.nextInt(symbols.length)]);
                         backPad = backPad +(symbols[random.nextInt(symbols.length)]);
                     }
-                    newNode = this.newNode.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                    newNode = this.newNode.addChild(frontPad+Main.selected_node.getWord()+backPad);
                 } else {//dialogue box
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow symbols!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"POLICY: Your policy does not allow symbols!",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
             } else if (insert.isSelected()) {
                 //insert
                 String characterString = "";
-                if (main_file.gui.settings.canLowercase()){
+                if (Main.Gui.Settings.canLowercase()){
                     characterString = characterString+"abcdefghijklmnopqrstuvwxyz";
                 }
-                if (main_file.gui.settings.canUppercase()){
+                if (Main.Gui.Settings.canUppercase()){
                     characterString = characterString+"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 }
-                if (main_file.gui.settings.canNumber()){
+                if (Main.Gui.Settings.canNumber()){
                     characterString = characterString+"1234567890";
                 }
-                if (main_file.gui.settings.canSymbol()){
+                if (Main.Gui.Settings.canSymbol()){
                     characterString = characterString+"()-.?[]_`~;:!@#$%^&*+=";
                 }
                 if (!characterString.equals("")){
@@ -440,9 +440,9 @@ public class rightPanel extends JPanel{
                     }
                     newNode = this.newNode.addChild(String.join("",charlist));
                 } else {
-                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow any characters!",true);
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"POLICY: Your policy does not allow any characters!",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
                 }
 
@@ -460,14 +460,14 @@ public class rightPanel extends JPanel{
             
             } else {
                 //else
-                JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: No mutation selected",true);
+                JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: No mutation selected",true);
                     dialog.setSize(330,20);
-                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
                     dialog.setVisible(true);
             }
 
             if (newNode.getWord() != null){
-                newNode.setRightPanel(new rightPanel(newNode.getWord(),(JPanel) main_file.gui.getTabs().getSelectedComponent(),newNode));
+                newNode.setRightPanel(new RightPanel(newNode.getWord(),(JPanel) Main.Gui.getTabs().getSelectedComponent(),newNode));
             }
         }
     }

@@ -19,7 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 
-public class settings extends JPanel {
+public class Settings extends JPanel {
     private JCheckBox canLowercase;
     private JCheckBox canUppercase;
     private JCheckBox canNumber;
@@ -38,7 +38,7 @@ public class settings extends JPanel {
     private String selectedWordlistName;
     private String selectedWordlistString;
 
-    public settings(JTabbedPane tabs){
+    public Settings(JTabbedPane tabs){
 
         setBackground(new Color(200,200,255));
         setLayout(new GridBagLayout());// let setBounds work
@@ -360,9 +360,9 @@ public class settings extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {//TODO redo list creation
                 try {
-                    main_file.createPersonalList();
+                    Main.createPersonalList();
                 } catch (IOException e1) {
-                    System.out.println("main_file.createPersonalList() failed!!!");
+                    System.out.println("Main.createPersonalList() failed!!!");
                     e1.printStackTrace();
                 }
                 wordBox.addItem("personalList.txt");
@@ -380,9 +380,9 @@ public class settings extends JPanel {
         try {
             return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
         } catch (IOException e) {
-            JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: File not found!",true);
+            JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: File not found!",true);
             dialog.setSize(200,20);
-            dialog.setLocationRelativeTo(main_file.gui.getFrame());
+            dialog.setLocationRelativeTo(Main.Gui.getFrame());
             dialog.setVisible(true);
         }
         return "";

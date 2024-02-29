@@ -25,6 +25,7 @@ public class gui {
     protected settings settings;
 
     public gui() {
+        //TODO suggestions, if characters are missing, its too short or long substrings are matched
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
         this.trees = new ArrayList<JTree>();
@@ -59,6 +60,7 @@ public class gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createNewWorkingFileTab(panel1_text1.getText());
+                panel1_text1.setText("");
             }});
         
 
@@ -69,7 +71,7 @@ public class gui {
         c.gridwidth = 1;
         c.weightx = 0;
         c.weighty = 1;
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.PAGE_START;
         panel1.add(panel1_button1,c);
 
         c = new GridBagConstraints();
@@ -79,7 +81,7 @@ public class gui {
         c.gridwidth = 1;
         c.weightx = 0;
         c.weighty = 1;
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.PAGE_START;
         panel1.add(panel1_text1,c);
 
         this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);

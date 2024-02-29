@@ -6,11 +6,13 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-public class passwordCheck extends SwingWorker<String,Integer> {
+public class approximateCheck extends SwingWorker<String,Integer> {
+    //TODO make a new longest substring test?
+    //TODO make hashing time test?
     private String pattern;
     private JProgressBar progressBar;
     private node node;
-    public  passwordCheck(node node,JProgressBar progressBar){
+    public  approximateCheck(node node,JProgressBar progressBar){
         this.pattern = node.getWord();
         this.node = node;
         this.progressBar = progressBar;

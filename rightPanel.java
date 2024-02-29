@@ -6,6 +6,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Random;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -22,19 +25,23 @@ import javax.swing.SpinnerNumberModel;
 
 public class rightPanel extends JPanel{
     private node newNode;
+
     private JRadioButton padNumber;
     private JRadioButton homoglyph;
     private JRadioButton capitalize;
+    private JRadioButton reverse;
+    private JRadioButton insert;
+    private JRadioButton padSymbol;
+
     private JSpinner howMany;
     private JButton goMutate;
     private JButton goTest;
     private JProgressBar progressBar;
     private JTextArea resultBox;
-
+    
     public rightPanel(String title,JPanel parent,node newNode){
         this.newNode = newNode;
 
-        //TODO add all different mutation types
         parent.add(this);
         setVisible(false);
         GridBagConstraints c = new GridBagConstraints();
@@ -96,13 +103,13 @@ public class rightPanel extends JPanel{
 
         goMutate = new JButton("Go"); // setting up mutate button
         c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 3;
+        c.gridx = 3;
+        c.gridy = 4;
         c.gridheight = 1;
         c.gridwidth = 1;
         c.weighty = 0.1;
         c.weightx = 1;
-        c.anchor = GridBagConstraints.LINE_START;
+        c.anchor = GridBagConstraints.CENTER;
         goMutate.setToolTipText("This is a test button to create test children");
         add(goMutate,c);
         goMutate.addActionListener( new ActionListener(){// process for creating a new child
@@ -147,32 +154,70 @@ public class rightPanel extends JPanel{
         capitalize.setToolTipText("Create a child by capitalizing random characters");
         add(capitalize,c);
 
-        ButtonGroup mutateRadioGroup = new ButtonGroup();
-        mutateRadioGroup.add(padNumber);
-        mutateRadioGroup.add(homoglyph);
-        mutateRadioGroup.add(capitalize);
-
-        JLabel howManyLabel = new JLabel("How many?");
+        reverse = new JRadioButton("Reverse");
         c = new GridBagConstraints();
         c.gridx = 2;
-        c.gridy = 1;
+        c.gridy = 4;
         c.gridheight = 1;
         c.gridwidth = 1;
         c.weighty = 0.1;
-        c.weightx = 1;
         c.anchor = GridBagConstraints.LINE_START;
-        add(howManyLabel,c);
+        capitalize.setToolTipText("Create a child by reversing the password");
+        add(reverse,c);
 
-        
-        howMany = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+        insert = new JRadioButton("Random Insert");
+        c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.anchor = GridBagConstraints.LINE_START;
+        capitalize.setToolTipText("Create a child by inserting random characters");
+        add(insert,c);
+
+        padSymbol = new JRadioButton("Pad Symbols");
         c = new GridBagConstraints();
         c.gridx = 2;
         c.gridy = 2;
         c.gridheight = 1;
         c.gridwidth = 1;
         c.weighty = 0.1;
-        c.weightx = 1;
         c.anchor = GridBagConstraints.LINE_START;
+        capitalize.setToolTipText("Create a child by padding the parent with symbols");
+        add(padSymbol,c);
+
+        
+
+        ButtonGroup mutateRadioGroup = new ButtonGroup();
+        mutateRadioGroup.add(padNumber);
+        mutateRadioGroup.add(homoglyph);
+        mutateRadioGroup.add(capitalize);
+        mutateRadioGroup.add(reverse);
+        mutateRadioGroup.add(insert);
+        mutateRadioGroup.add(padSymbol);
+
+        JLabel howManyLabel = new JLabel("How many?");
+        c = new GridBagConstraints();
+        c.gridx = 3;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        add(howManyLabel,c);
+
+        
+        howMany = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+        c = new GridBagConstraints();
+        c.gridx = 3;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.weighty = 0.1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.CENTER;
         add(howMany,c);
         
         progressBar = new JProgressBar(0,100);
@@ -180,7 +225,7 @@ public class rightPanel extends JPanel{
         c.gridx = 1;
         c.gridy = 11;
         c.gridheight = 1;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         c.weighty = 0.1;
         c.insets = new Insets(0, 10, 0, 10);
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -200,7 +245,7 @@ public class rightPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 if (main_file.selected_node != null && main_file.gui.settings.getSelectedWordlistString() != null){
-                    passwordCheck checker = new passwordCheck(main_file.selected_node,progressBar);
+                    approximateCheck checker = new approximateCheck(main_file.selected_node,progressBar);
                     checker.execute();
                     goTest.setEnabled(false);
                 } else {
@@ -223,7 +268,7 @@ public class rightPanel extends JPanel{
         c.gridx = 1;
         c.gridy = 13;
         c.gridheight = 1;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         c.weighty = 1;
         c.weightx = 1;
         c.fill = GridBagConstraints.BOTH;
@@ -265,15 +310,14 @@ public class rightPanel extends JPanel{
             //radio button is a child of parent
             if (padNumber.isSelected()){
                 //pad numbers
-                boolean isValid = main_file.gui.settings.canNumber();
-                if (isValid == true){
+                if (main_file.gui.settings.canNumber()){
                     String frontPad = "";
                     String backPad = "";
                     for (int i = 0 ; i < howManyNum ; i++){
                         frontPad = frontPad +(Integer.toString(random.nextInt(10)));
                         backPad = backPad +(Integer.toString(random.nextInt(10)));
                     }
-                    newNode = main_file.selected_node.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                    newNode = this.newNode.addChild(frontPad+main_file.selected_node.getWord()+backPad);
                 } else {//dialogue box
                     JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow numbers!",true);
                     dialog.setSize(330,20);
@@ -282,8 +326,138 @@ public class rightPanel extends JPanel{
                 }
             } else if (homoglyph.isSelected()){
                 //homoglyph
+                Dictionary<String,String> glyphs = new Hashtable<>();
+                if (main_file.gui.settings.canNumber()) {
+                    glyphs.put("i", "1");
+                    glyphs.put("t", "7");
+                    glyphs.put("E", "3");
+                    glyphs.put("G","6");
+                    glyphs.put("I", "1");
+                    glyphs.put("O", "0");
+                    glyphs.put("S","5");
+                    glyphs.put("T","7");
+                }
+                if (main_file.gui.settings.canSymbol()){
+                    glyphs.put("a","@");
+                    glyphs.put("J", "!");
+                    glyphs.put("l","[");
+                    glyphs.put("m","n");
+                    glyphs.put("n","m" );
+                    glyphs.put("p","q");
+                    glyphs.put("q", "p");
+                } 
+                
+                String[] charList = this.newNode.getWord().split("");
+                int pass = 0;
+                int fail = 0;
+                
+                while (pass < howManyNum && fail < this.newNode.getWord().length()*20){
+                    int randIndex = random.nextInt(this.newNode.getWord().length());
+                    if (glyphs.get(charList[randIndex]) != null){
+                        charList[randIndex] = glyphs.get(charList[randIndex]);
+                        pass += 1;
+                    } else {
+                        fail += 1;
+                    }
+                }
+                if (glyphs.isEmpty()) {
+                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow numbers or symbols!",true);
+                    dialog.setSize(400,20);
+                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setVisible(true);
+                }
+                if (pass >= 1){
+                    newNode = this.newNode.addChild(String.join("",charList));
+                } else {
+                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: Not enough homoglyphs found",true);
+                    dialog.setSize(330,20);
+                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setVisible(true);
+                }
+
             } else if (capitalize.isSelected()){
                 //capitalize
+                //find a letter and replace it with the capital version
+                if (main_file.gui.settings.canUppercase()){
+                    String[] charList = this.newNode.getWord().split("");
+                    int pass = 0;
+                    int fail = 0;
+                    while (pass < howManyNum && fail < this.newNode.getWord().length()*10){
+                        int randIndex = random.nextInt(this.newNode.getWord().length());
+                        if (Character.isLowerCase(charList[randIndex].charAt(0))){
+                            charList[randIndex] = charList[randIndex].toUpperCase();
+                            pass += 1;
+                        } else {
+                            fail +=1;
+                        }
+                    }
+                    newNode = this.newNode.addChild(String.join("",charList));
+                } else {
+                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow uppercase!",true);
+                    dialog.setSize(330,20);
+                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setVisible(true);
+                }
+
+            } else if (padSymbol.isSelected()) {
+                //pad symbol
+                //pad numbers
+                if (main_file.gui.settings.canSymbol()){
+                    String frontPad = "";
+                    String backPad = "";
+                    String[] symbols = "()-.?[]_`~;:!@#$%^&*+=".split("");
+                    for (int i = 0 ; i < howManyNum ; i++){
+                        frontPad = frontPad +(symbols[random.nextInt(symbols.length)]);
+                        backPad = backPad +(symbols[random.nextInt(symbols.length)]);
+                    }
+                    newNode = this.newNode.addChild(frontPad+main_file.selected_node.getWord()+backPad);
+                } else {//dialogue box
+                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow symbols!",true);
+                    dialog.setSize(330,20);
+                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setVisible(true);
+                }
+            } else if (insert.isSelected()) {
+                //insert
+                String characterString = "";
+                if (main_file.gui.settings.canLowercase()){
+                    characterString = characterString+"abcdefghijklmnopqrstuvwxyz";
+                }
+                if (main_file.gui.settings.canUppercase()){
+                    characterString = characterString+"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                }
+                if (main_file.gui.settings.canNumber()){
+                    characterString = characterString+"1234567890";
+                }
+                if (main_file.gui.settings.canSymbol()){
+                    characterString = characterString+"()-.?[]_`~;:!@#$%^&*+=";
+                }
+                if (!characterString.equals("")){
+                    String[] characters = characterString.split("");
+                    ArrayList<String> charlist =  new ArrayList<String>(Arrays.asList(this.newNode.getWord().split("")));
+                    for (int i = 0 ; i < howManyNum ; i++){
+                        charlist.add(random.nextInt(this.newNode.getWord().length()),characters[random.nextInt(characters.length)]);
+                    }
+                    newNode = this.newNode.addChild(String.join("",charlist));
+                } else {
+                    JDialog dialog = new JDialog(main_file.gui.getFrame(),"POLICY: Your policy does not allow any characters!",true);
+                    dialog.setSize(330,20);
+                    dialog.setLocationRelativeTo(main_file.gui.getFrame());
+                    dialog.setVisible(true);
+                }
+
+            }else if (reverse.isSelected()){
+                //reverse
+                String[] charList = this.newNode.getWord().split("");
+                String newpass = "";
+                for (String i : charList){
+                    newpass = i+newpass;
+                }
+                newNode = this.newNode.addChild(newpass);
+            
+            
+            
+            
             } else {
                 //else
                 JDialog dialog = new JDialog(main_file.gui.getFrame(),"ERROR: No mutation selected",true);

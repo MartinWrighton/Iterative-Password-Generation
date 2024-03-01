@@ -59,7 +59,9 @@ public class Gui {
         panel1_button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createNewWorkingFileTab(panel1_text1.getText());
+                if (!panel1_text1.getText().equals("")){
+                    createNewWorkingFileTab(panel1_text1.getText());
+                } 
                 panel1_text1.setText("");
             }});
         

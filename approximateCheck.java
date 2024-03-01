@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
@@ -59,7 +61,9 @@ public class ApproximateCheck extends SwingWorker<String,Integer> {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        Node.getRightPanel().getGoTest().setEnabled(true);
+        for (JButton i : Node.getRightPanel().getButtons()){
+            i.setEnabled(true);
+        }
         Node.setIssues(issues);
         this.Node.getRightPanel().updateIssues();
     }

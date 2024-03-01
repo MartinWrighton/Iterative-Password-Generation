@@ -36,6 +36,8 @@ public class RightPanel extends JPanel{
     private JSpinner howMany;
     private JButton goMutate;
     private JButton goTest;
+    private JButton goSubstring;
+
     private JProgressBar progressBar;
     private JTextArea resultBox;
     
@@ -232,7 +234,7 @@ public class RightPanel extends JPanel{
         c.anchor = GridBagConstraints.LINE_START;
         add(progressBar,c);
 
-        goTest = new JButton("Test");
+        goTest = new JButton("Test Approximate");
         c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 10;
@@ -244,10 +246,12 @@ public class RightPanel extends JPanel{
         goTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if (Main.selected_node != null && Main.Gui.Settings.getSelectedWordlistString() != null){
+                if (newNode != null && Main.Gui.Settings.getSelectedWordlistString() != null){
                     ApproximateCheck checker = new ApproximateCheck(Main.selected_node,progressBar);
                     checker.execute();
-                    goTest.setEnabled(false);
+                    for (JButton i : getButtons()){
+                        i.setEnabled(false);
+                    }
                 } else {
                     JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: No wordlist selected!",true);
                     dialog.setSize(230,20);
@@ -255,6 +259,32 @@ public class RightPanel extends JPanel{
                     dialog.setVisible(true);
                 }
             }});
+
+            goSubstring = new JButton("Test Substrings");
+            c = new GridBagConstraints();
+            c.gridx = 2;
+            c.gridy = 10;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            c.weighty = 0.1;
+            c.anchor = GridBagConstraints.LINE_START;
+            add(goSubstring,c);
+            goSubstring.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    if (Main.selected_node != null && Main.Gui.Settings.getSelectedWordlistString() != null){
+                        SubstringCheck checker = new SubstringCheck(Main.selected_node,progressBar);
+                        checker.execute();
+                        for (JButton i : getButtons()){
+                            i.setEnabled(false);
+                        }
+                    } else {
+                        JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: No wordlist selected!",true);
+                        dialog.setSize(230,20);
+                        dialog.setLocationRelativeTo(Main.Gui.getFrame());
+                        dialog.setVisible(true);
+                    }
+                }});
         
         resultBox = new JTextArea();
         resultBox.setFont(resultBox.getFont().deriveFont(11f));
@@ -480,7 +510,8 @@ public class RightPanel extends JPanel{
         }
     }
 
-    public JButton getGoTest(){
-        return this.goTest;
+    public JButton[] getButtons(){
+        JButton[] buttonList = {goTest,goSubstring};
+        return buttonList;
     }
 }

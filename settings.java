@@ -14,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -261,7 +262,7 @@ public class Settings extends JPanel {
         // getting list of wordlists
         wordBox = new JComboBox<String>();
         try {
-            File wordFile = new File("../hashcat/CustomWordlists");
+            File wordFile = new File("WordLists");
             for (File i : wordFile.listFiles()) {
                 wordBox.addItem(i.getName());
             }
@@ -280,7 +281,7 @@ public class Settings extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         wordlistPanel.add(wordBox,c);
         
-        selectList = new JButton("Use this list");
+        selectList = new JButton("Select List");
         //selectList.setMargin(new Insets(0, 0, 0, 0));
         c = new GridBagConstraints();
         c.gridx = 2;
@@ -315,8 +316,8 @@ public class Settings extends JPanel {
         //TODO get these to work
        
 
-        JButton combineList = new JButton("Combine Lists");
-        //combineList.setMargin(new Insets(0, 0, 0, 0));
+        JButton editList = new JButton("Edit List");
+
         c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 4;
@@ -326,11 +327,25 @@ public class Settings extends JPanel {
         c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
-        combineList.setToolTipText("<html>Create a new Wordlist by combining parts <br> of one or more lists.<html/>");
-        combineList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(combineList,c);
+        editList.setToolTipText("<html>Edit selected list<html/>");
 
-        JButton uploadList = new JButton("Upload Custom Lists");
+        wordlistPanel.add(editList,c);
+        editList.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "WordLists/"+selectedWordlistName);
+                try {
+                    pb.start();
+                } catch (IOException e1) {
+
+                }
+            }
+            
+        });
+
+
+        JButton createList = new JButton("Create new list");
         //uploadList.setMargin(new Insets(0, 0, 0, 0));
         c = new GridBagConstraints();
         c.gridx = 1;
@@ -341,11 +356,40 @@ public class Settings extends JPanel {
         c.weighty = 1;
         c.insets = new Insets(3, 0, 0, 0);
         c.anchor = GridBagConstraints.LINE_START;
-        uploadList.setToolTipText("<html>Upload your own list from elsewhere <br> on your computer.<html/>");
-        uploadList.setBackground(new Color(255,105,97));
-        wordlistPanel.add(uploadList,c);
+        createList.setToolTipText("<html>Create a new list.<html/>");
 
-        JButton personalList = new JButton("Create Personal List");
+        wordlistPanel.add(createList,c);
+        createList.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File newFile = new File("WordLists/new.txt");
+                try {
+                    newFile.createNewFile();
+                    ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "WordLists/new");
+                    pb.start();
+                    //update the combobox
+                    wordBox.removeAllItems();
+                    try {
+                        File wordFile = new File("WordLists");
+                        for (File i : wordFile.listFiles()) {
+                            wordBox.addItem(i.getName());
+                        }
+                    } catch (Exception e2) {
+                        System.out.println("Hashcat folder not found");
+                    }
+                } catch (IOException e1) {
+                    JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: Could not create file!",true);
+                    dialog.setSize(200,20);
+                    dialog.setLocationRelativeTo(Main.Gui.getFrame());
+                    dialog.setVisible(true);
+                    
+                }
+            }
+            
+        });
+
+        JButton personalList = new JButton("Apply best 64");
         //personalList.setMargin(new Insets(0, 0, 0, 0));
         c = new GridBagConstraints();
         c.gridx = 1;
@@ -378,7 +422,7 @@ public class Settings extends JPanel {
 
     private String wordlistToString(String filename){
         try {
-            return String.join("",Files.readAllLines(FileSystems.getDefault().getPath(filename)));
+            return String.join("",Files.readAllLines(FileSystems.getDefault().getPath("WordLists/"+filename)));
         } catch (IOException e) {
             JDialog dialog = new JDialog(Main.Gui.getFrame(),"ERROR: File not found!",true);
             dialog.setSize(200,20);

@@ -9,7 +9,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 public class ApproximateCheck extends SwingWorker<String,Integer> {
-    //TODO make a new longest substring test?
+
     //TODO make hashing time test?
     private String pattern;
     private JProgressBar progressBar;

@@ -43,7 +43,7 @@ public class RightPanel extends JPanel{
     
     public RightPanel(String title,JPanel parent,Node newNode){
         this.newNode = newNode;
-
+        //TODO add option to edit manually
         parent.add(this);
         setVisible(false);
         GridBagConstraints c = new GridBagConstraints();

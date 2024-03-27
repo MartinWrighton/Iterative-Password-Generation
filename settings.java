@@ -8,13 +8,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Date;
+
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -363,10 +366,14 @@ public class Settings extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                File newFile = new File("WordLists/new.txt");
+
+                String[] time =  new Date().toString().split(" ");
+                time = time[3].split(":");
+                String fileName = String.join("",time);
+                File newFile = new File("WordLists/"+fileName+".txt");
                 try {
                     newFile.createNewFile();
-                    ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "WordLists/new");
+                    ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "WordLists/"+fileName);
                     pb.start();
                     //update the combobox
                     wordBox.removeAllItems();
@@ -402,11 +409,23 @@ public class Settings extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         personalList.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e) {//TODO redo list creation
+            public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.createPersonalList();
+                    //TODO where is this outputting / what is it doing. Main file has the code to print the output
+                    ArrayList<String> command = new ArrayList<String>();
+                    command.add("hashcat.exe");
+                    command.add("WordLists/"+selectedWordlistName+".txt");
+                    command.add("-r");
+                    command.add("rules/best64.rule");
+                    command.add("--stdout");
+                    command.add("-o");
+                    String path =  "CustomWordlists/"+selectedWordlistName+"64.txt";
+                    command.add(path);
+                    ProcessBuilder build = new ProcessBuilder(command);
+                    build.directory(new File("hashcat"));
+                    Process process = build.start();
                 } catch (IOException e1) {
-                    System.out.println("Main.createPersonalList() failed!!!");
+                    System.out.println("createPersonalList() failed!!!");
                     e1.printStackTrace();
                 }
                 wordBox.addItem("personalList.txt");

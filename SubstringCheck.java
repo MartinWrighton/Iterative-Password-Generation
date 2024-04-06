@@ -55,7 +55,6 @@ public class SubstringCheck extends SwingWorker<String,Integer> {
         try {
             result = get();
 
-            //TODO there may be a faster premade way of doint the approx string match
             
             
             issues.add("TEST: "+Main.Gui.Settings.getSelectedWordlistName()+" matched a continuous "+ (result.length()*100)/this.Node.getWord().length()+"% of this password: "+result+"\n");

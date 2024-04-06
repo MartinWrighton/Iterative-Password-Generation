@@ -4,12 +4,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.Date;
-
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -59,8 +60,6 @@ public class Settings extends JPanel {
     
     public void createCharacterListPanel(){
         
-
-        //TODO implement character lists
         JPanel characterPanel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 1;
@@ -233,8 +232,6 @@ public class Settings extends JPanel {
     }
 
     public void createWordlistPanel(){
-        //TODO add wordlist handling and clean up the logic into functions, might need to redo a lot of it
-        //TODO ability to view list (as a popup or just open the file?)
         JPanel wordlistPanel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 2;
@@ -316,7 +313,6 @@ public class Settings extends JPanel {
             }
         });
 
-        //TODO get these to work
        
 
         JButton editList = new JButton("Edit List");
@@ -411,31 +407,53 @@ public class Settings extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    //TODO where is this outputting / what is it doing. Main file has the code to print the output
                     ArrayList<String> command = new ArrayList<String>();
-                    command.add("hashcat.exe");
-                    command.add("WordLists/"+selectedWordlistName+".txt");
+                    command.add("hashcat\\hashcat.exe");
+                    command.add("..\\WordLists\\"+selectedWordlistName);
                     command.add("-r");
-                    command.add("rules/best64.rule");
+                    command.add("rules\\best64.rule");
                     command.add("--stdout");
                     command.add("-o");
-                    String path =  "CustomWordlists/"+selectedWordlistName+"64.txt";
+                    String path =  "..\\WordLists\\64"+selectedWordlistName;
                     command.add(path);
                     ProcessBuilder build = new ProcessBuilder(command);
                     build.directory(new File("hashcat"));
+
                     Process process = build.start();
+
+                    BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(process.getInputStream()));
+                    @SuppressWarnings("unused")
+                    String s = null;
+                    while ((s = stdInput.readLine()) != null) {
+                        
+                    }
+
+                    //update the combobox
+                    //TimeUnit.SECONDS.sleep(1);
+                    wordBox.removeAllItems();
+                    try {
+                        File wordFile = new File("WordLists");
+                        for (File i : wordFile.listFiles()) {
+                            wordBox.addItem(i.getName());
+                        }
+                    } catch (Exception e2) {
+                        System.out.println("Hashcat folder not found");
+                    }
+                    
                 } catch (IOException e1) {
                     System.out.println("createPersonalList() failed!!!");
                     e1.printStackTrace();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
-                wordBox.addItem("personalList.txt");
+                
                 
 
                 
             }
         });
-        personalList.setToolTipText("<html>Use hashcat to create a personalised wordlist <br> based on your publicly available data.<html/>");
-        personalList.setBackground(new Color(255,179,71));
+        personalList.setToolTipText("<html>Apply hashcats best64 rule to a list<html/>");
         wordlistPanel.add(personalList,c);
     }
 

@@ -325,7 +325,7 @@ public class RightPanel extends JPanel{
             }
             
         });
-
+        
     }
 
     private void createChildNode(ActionEvent e){

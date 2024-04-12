@@ -142,7 +142,7 @@ public class Gui {
     private JTree createNewTree(String rootPassword,JPanel parentPanel){
         Node newNode = new Node(rootPassword, null,null,null,null);
         newNode.setRightPanel(new RightPanel(rootPassword,parentPanel,newNode));
-        newNode.getRightPanel().setVisible(true);
+        newNode.getRightPanel().setVisible(false);
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newNode);// configuring tree and combining with our Node class
         newNode.setTreeNode(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);

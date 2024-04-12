@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class Node {
     private String word;
-    private int strength;
     private Node parent;
     private ArrayList<Node> children;
     private DefaultMutableTreeNode treeNode;
@@ -103,10 +102,6 @@ public class Node {
         return this.word;
     }
 
-    public int getStrength(){
-        return this.strength;
-    }
-
     public Node getParent(){
         return this.parent;
     }
@@ -134,10 +129,6 @@ public class Node {
     public void setWord(String word) {
         this.word = word;
         policyCheck();
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
     }
 
     public void setParent(Node parent) {

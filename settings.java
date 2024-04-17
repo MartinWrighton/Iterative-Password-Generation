@@ -174,7 +174,7 @@ public class Settings extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         policyPanel.add(needLength,c);
 
-        targetLength = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
+        targetLength = new JSpinner(new SpinnerNumberModel(15, 1, 20, 1));
         c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 2;

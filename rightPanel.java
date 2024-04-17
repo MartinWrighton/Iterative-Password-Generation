@@ -364,6 +364,7 @@ public class RightPanel extends JPanel{
                     glyphs.put("G","6");
                     glyphs.put("I", "1");
                     glyphs.put("O", "0");
+                    glyphs.put("o", "0");
                     glyphs.put("S","5");
                     glyphs.put("T","7");
                 }

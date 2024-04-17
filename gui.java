@@ -7,8 +7,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -30,7 +32,7 @@ public class Gui {
         this.tabs = new JTabbedPane();// tabbed pane
         this.trees = new ArrayList<JTree>();
         this.frame.setLayout(new GridBagLayout());
-        this.frame.setMinimumSize(new Dimension(500,400));
+        this.frame.setMinimumSize(new Dimension(550,400));
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
@@ -55,7 +57,11 @@ public class Gui {
 
         JTextField panel1_text1 = new JTextField(20);
         JButton panel1_button1 = new JButton("Create new File");// create tab button
-
+        JTextArea panel1Text = new JTextArea(10,61);
+        JPanel textpanel = new JPanel();
+        panel1Text.append("Welcome!\nTo create a new password: enter your simple root password inthe box above and press 'Create New File'.\nThis will create a new tab for you to navigate to.\nThere you will be able to select your password or any       existing child to open its panel. Choose from the list of   mutations, use the spinner to set how many times it should  be applied and hit go!\nClick either testing button to test the password against thecurrently selected wordlist. You will be free to continue   working in the meantime.\nRemember to check the settings tab to set your password     policy, dissalow certain character types and to select a    wordlist!");
+        panel1Text.setEditable(false);
+        panel1Text.setLineWrap(true);
         panel1_button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,6 +91,17 @@ public class Gui {
         c.weighty = 1;
         c.anchor = GridBagConstraints.PAGE_START;
         panel1.add(panel1_text1,c);
+
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridheight = 0;
+        c.gridwidth = 4;
+        c.weightx = 0;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.PAGE_START;
+        panel1.add(textpanel,c);
+        textpanel.add(panel1Text);
 
         this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);
 

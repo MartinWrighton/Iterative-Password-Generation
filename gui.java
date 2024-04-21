@@ -23,14 +23,14 @@ import java.awt.Insets;
 public class Gui {
     private JFrame frame;
     private JTabbedPane tabs;
-    private ArrayList<JTree> trees;
+
     protected Settings Settings;
 
     public Gui() {
         //TODO suggestions, if characters are missing, its too short or long substrings are matched
         this.frame = new JFrame(); // creating instance of JFrame
         this.tabs = new JTabbedPane();// tabbed pane
-        this.trees = new ArrayList<JTree>();
+
         this.frame.setLayout(new GridBagLayout());
         this.frame.setMinimumSize(new Dimension(550,400));
         GridBagConstraints c = new GridBagConstraints();
@@ -51,7 +51,7 @@ public class Gui {
     }
 
     private void createNewFileTab(){
-        //TODO fill out this page
+
         JPanel panel1 = new JPanel(new GridBagLayout());// new page panel
         
 
@@ -59,7 +59,7 @@ public class Gui {
         JButton panel1_button1 = new JButton("Create new File");// create tab button
         JTextArea panel1Text = new JTextArea(10,61);
         JPanel textpanel = new JPanel();
-        panel1Text.append("Welcome!\nTo create a new password: enter your simple root password inthe box above and press 'Create New File'.\nThis will create a new tab for you to navigate to.\nThere you will be able to select your password or any       existing child to open its panel. Choose from the list of   mutations, use the spinner to set how many times it should  be applied and hit go!\nClick either testing button to test the password against thecurrently selected wordlist. You will be free to continue   working in the meantime.\nRemember to check the settings tab to set your password     policy, dissalow certain character types and to select a    wordlist!");
+        panel1Text.append("Welcome!\nTo create a new password: enter your simple root password inthe box above and press 'Create New File'.\nThis will create a new tab for you to navigate to.\nThere you will be able to select your password or any       existing child to open its panel. Choose from the list of   mutations, use the spinner to set how many times it should  be applied and hit go!\nClick either testing button to test the password against thecurrently selected wordlist. You will be free to continue   working in the meantime.\nRemember to check the settings tab to set your password     policy, disalow certain character types and to select a     wordlist!");
         panel1Text.setEditable(false);
         panel1Text.setLineWrap(true);
         panel1_button1.addActionListener(new ActionListener() {
@@ -102,7 +102,6 @@ public class Gui {
         c.anchor = GridBagConstraints.PAGE_START;
         panel1.add(textpanel,c);
         textpanel.add(panel1Text);
-
         this.tabs.insertTab("New+", null, panel1, "Create a new file", 0);
 
 
@@ -127,7 +126,6 @@ public class Gui {
     private void createLeftPanel(JPanel newpanel,String rootPassword){
         //create left panel
         JPanel newLeftPanel = new JPanel();
-        
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 1;
@@ -152,7 +150,6 @@ public class Gui {
         c.weighty = 1;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         newLeftPanel.add(tree,c);
-        trees.add(tree);
     }
 
     
